@@ -1,2 +1,2 @@
 # javascript
-Web网页javascript交互效果实例！
+Web网页常用代码！

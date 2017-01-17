@@ -1,0 +1,155 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style>
+        .tab{border:10px solid #000;width:300px;height:200px;margin:0 auto;}
+        .tab_head{border-bottom:1px solid #ccc;}
+        .tab_head li{float:left;display:inline;height:24px;line-height:24px;padding:0 10px;margin-right:10px;cursor:pointer;}
+        .tab_head li.active{background:#ccc;}
+        .tab_cont .cont{display:none;padding:10px;}
+        .tab_cont .active{display:block;}
+    </style>
+</head>
+<body>
+
+<div id="tab_1" class="tab">
+    <ul class="tab_head clear">
+        <li class="active">北京</li>
+        <li>上海</li>
+        <li>天津</li>
+        <li>重庆</li>
+    </ul>
+    <div class="tab_cont">
+        <div class="cont active">【自定义属性方法】北京内容</div>
+        <div class="cont">【自定义属性方法】上海内容</div>
+        <div class="cont">【自定义属性方法】天津内容</div>
+        <div class="cont">【自定义属性方法】重庆内容</div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        //入口
+        var init = function(){
+            var tabId = MM.$('tab_1'),
+                tabBtnsWrap = MM.getClass('tab_head', tabId)[0],
+                tabContsWrap = MM.getClass('tab_cont', tabId)[0],
+                btnList = MM.children(tabBtnsWrap),
+                contList = MM.children(tabContsWrap);
+            tab(btnList, contList);
+        };
+        function tab(headList, contList) {
+            var i, j, headLeg = headList.length;
+            for(i = 0; i < headLeg; i++) {
+                headList[i].index = i; //自定义index属性
+                MM.bind(headList[i], 'click', function(){
+                    for(j = 0; j < headLeg; j++) {
+                        headList[j].className = '';
+                        contList[j].className = 'cont';
+                    }
+                    this.className = 'active';
+                    contList[this.index].className = 'cont active';
+                });
+            }
+        }
+        init();
+    }());
+</script>
+
+<br/><br/><br/>
+
+<div id="tab_2" class="tab">
+    <ul class="tab_head clear">
+        <li class="active">北京</li>
+        <li>上海</li>
+        <li>天津</li>
+        <li>重庆</li>
+    </ul>
+    <div class="tab_cont">
+        <div class="cont active">【闭包方法】北京内容</div>
+        <div class="cont">【闭包方法】上海内容</div>
+        <div class="cont">【闭包方法】天津内容</div>
+        <div class="cont">【闭包方法】重庆内容</div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        //入口
+        var init = function(){
+            var tabId = MM.$('tab_2'),
+                tabBtnsWrap = MM.getClass('tab_head', tabId)[0],
+                tabContsWrap = MM.getClass('tab_cont', tabId)[0],
+                btnList = MM.children(tabBtnsWrap),
+                contList = MM.children(tabContsWrap);
+            tab(btnList, contList);
+        };
+        function tab(headList, contList) {
+            var i, j, headLeg = headList.length;
+            for(i = 0; i < headLeg; i++) {
+                (function(index){ //通过闭包获取当前序列值
+                    MM.bind(headList[index], 'click', function(){
+                        for(j = 0; j < headLeg; j++) {
+                            headList[j].className = '';
+                            contList[j].className = 'cont';
+                        }
+                        this.className = 'active';
+                        contList[index].className = 'cont active';
+                    });
+                })(i);
+            }
+        }
+        init();
+    }());
+</script>
+
+<br/><br/><br/>
+
+<div id="tab_3" class="tab">
+    <ul class="tab_head clear">
+        <li class="active">北京</li>
+        <li>上海</li>
+        <li>天津</li>
+        <li>重庆</li>
+    </ul>
+    <div class="tab_cont">
+        <div class="cont active">【function方法】北京内容</div>
+        <div class="cont">【function方法】上海内容</div>
+        <div class="cont">【function方法】天津内容</div>
+        <div class="cont">【function方法】重庆内容</div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        //入口
+        var init = function(){
+            var tabId = MM.$('tab_3'),
+                tabBtnsWrap = MM.getClass('tab_head', tabId)[0],
+                tabContsWrap = MM.getClass('tab_cont', tabId)[0],
+                btnList = MM.children(tabBtnsWrap),
+                contList = MM.children(tabContsWrap);
+            tab(btnList, contList);
+        };
+        function tab(headList, contList) {
+            var i, j, headLeg = headList.length;
+            for(i = 0; i < headLeg; i++) {
+                getIndex(i); //通过function获取当前序列值
+            }
+            function getIndex(index){
+                MM.bind(headList[index], 'click', function(){
+                    for(j = 0; j < headLeg; j++) {
+                        headList[j].className = '';
+                        contList[j].className = 'cont';
+                    }
+                    this.className = 'active';
+                    contList[index].className = 'cont active';
+                });
+            }
+        }
+        init();
+    }());
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css"/>
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .nav{
+            font-size:12px;
+            width:600px;
+            margin:20px auto;
+        }
+        .nav li{
+            float:left;
+            display:inline;
+            height:24px;
+            line-height:24px;
+            width:50px;
+            text-align:center;
+            background-color:#ccc;
+            margin:0 50px 0 0;
+            position:relative;
+        }
+        .drop-menu{
+            width:100px;
+            height:0px;
+            background-color:#ccc;
+            text-align:left;
+            position:absolute;
+            top:24px;
+            left:0px;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+<div id="nav" class="nav">
+    <ul class="clear">
+        <li>北京
+            <div class="drop-menu">北京菜单</div>
+        </li>
+        <li>上海
+            <div class="drop-menu">上海菜单</div>
+        </li>
+        <li>天津
+            <div class="drop-menu">天津菜单</div>
+        </li>
+        <li>哈尔滨</li>
+        <li>重庆
+            <div class="drop-menu">重庆菜单</div>
+        </li>
+        <li>广州
+            <div class="drop-menu">广州菜单</div>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    (function(){
+        //入口
+        var init = function(){
+            dropMenu('nav', 'drop-menu');
+        };
+        //下拉菜单公用函数
+        function dropMenu(ParentElem, MenuClass){
+            var nav = MM.$(ParentElem),
+                menuBtn = MM.getElem('li', nav);
+            for(var i = 0, leg = menuBtn.length; i < leg; i++){
+                MM.bind(menuBtn[i], 'mouseover', function(){
+                    var child = MM.children(this);
+                    for(var j = 0; j < child.length; j++){
+                        if(child[j].className == MenuClass){
+                            child[j].style.display = 'block';
+                            MM.animate(child[j], {height: 200, opacity: 100});
+                        }
+                    }
+                });
+                MM.bind(menuBtn[i], 'mouseout', function(){
+                    var child = MM.children(this);
+                    for(var j = 0; j < child.length; j++){
+                        if(child[j].className == MenuClass){
+                            var menu = child[j];
+                            MM.animate(child[j], {height: 0, opacity: 0}, function(){
+                                menu.style.display = 'none';
+                            });
+                        }
+                    }
+                });
+            }
+        }
+        init();
+    }());
+</script>
+</body>
+</html>

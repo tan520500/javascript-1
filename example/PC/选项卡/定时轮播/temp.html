@@ -1,0 +1,110 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .select_tab{width:400px;margin:20px auto;border:5px solid #ccc;font-size:12px;}
+        .select_tab .tab_head{border-bottom:2px solid #ccc;}
+        .select_tab .tab_head li{float:left;padding:0 10px;height:24px;line-height:24px;cursor:pointer;}
+        .select_tab .tab_head li.current{border-bottom:2px solid #c00;margin-bottom:-2px;}
+        .select_tab .tab_cont .cont_text{height:200px;display:none;padding:10px;}
+        .select_tab .tab_cont .cont_text.current{display:block;}
+    </style>
+</head>
+<body>
+
+<div id="tab_1" class="select_tab">
+    <ul class="tab_head clear">
+        <li class="current">北京</li>
+        <li>上海</li>
+        <li>天津</li>
+        <li>广东</li>
+        <li>重庆</li>
+    </ul>
+    <div class="tab_cont">
+        <div class="cont_text current">北京内容</div>
+        <div class="cont_text">上海内容</div>
+        <div class="cont_text">天津内容</div>
+        <div class="cont_text">广东内容</div>
+        <div class="cont_text">重庆内容</div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<div id="tab_2" class="select_tab">
+    <ul class="tab_head clear">
+        <li class="current">北京</li>
+        <li>上海</li>
+        <li>天津</li>
+        <li>广东</li>
+        <li>重庆</li>
+    </ul>
+    <div class="tab_cont">
+        <div class="cont_text current">北京内容</div>
+        <div class="cont_text">上海内容</div>
+        <div class="cont_text">天津内容</div>
+        <div class="cont_text">广东内容</div>
+        <div class="cont_text">重庆内容</div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        function TimerTab(tabId){
+            this.tabId = tabId;
+
+            var curIndex = 0;
+            var timer = null;
+            this.init = function(){
+                var tabWrapId = MM.$(this.tabId),
+                    tabBtnWrap = MM.getClass('tab_head', tabWrapId)[0],
+                    tabContWrap = MM.getClass('tab_cont', tabWrapId)[0],
+                    tabList = MM.children(tabBtnWrap),
+                    contList = MM.children(tabContWrap),
+                    leg = tabList.length;
+                var tabClass = function (number){
+                    for(var j = 0; j < leg; j++) {
+                        tabList[j].className = '';
+                        contList[j].className = 'cont_text';
+                    }
+                    tabList[number].className = 'current';
+                    contList[number].className = 'current cont_text';
+                };
+                var autoTab = function(){
+                    curIndex++;
+                    if(curIndex >= leg){
+                        curIndex = 0;
+                    }
+                    tabClass(curIndex);
+                    timer = setTimeout(autoTab, 2000);
+                };
+                for(var i = 0; i < leg; i++) {
+                    tabList[i].index = i;
+                    MM.bind(tabList[i], 'click', function(){
+                        clearTimeout(timer);
+                        tabClass(this.index);
+                        curIndex = this.index;
+                    });
+                }
+                timer = setTimeout(autoTab, 2000);
+                MM.bind(tabWrapId, 'mouseover', function(){
+                    clearTimeout(timer);
+                });
+                MM.bind(tabWrapId, 'mouseout', function(){
+                    timer = setTimeout(autoTab, 2000);
+                });
+            };
+        }
+
+        //使用方法
+        var demo01 = new TimerTab('tab_1');
+        demo01.init();
+        var demo02 = new TimerTab('tab_2');
+        demo02.init();
+    }());
+</script>
+</body>
+</html>

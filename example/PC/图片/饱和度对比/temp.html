@@ -1,0 +1,116 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        body{background:#000;}
+        .picture{width:600px;height:400px;margin:20px auto 0;position:relative;}
+        .picture .clear-img{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;}
+        .picture .blur-img{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;}
+        .picture img{display:block;width:100%;height:100%;}
+        .picture .blur-img{opacity:0;filter:alpha(opacity=0);}
+        #slider-track{width:700px;height:2px;background:#FFA000;margin:40px auto 0;position:relative;}
+        #slider-track .slider-handle{position:absolute;top:-10px;left:0px;width:20px;height:20px;border-radius:15px;background:#FFA000;}
+        #slider-track .mousedown{background:#ff4211;}
+    </style>
+</head>
+<body>
+
+<div class="picture">
+    <div class="clear-img"><img src="./images/downFloor.png" alt=""/></div>
+    <div id="blur-img" class="blur-img"><img src="./images/upFloor.png" alt=""/></div>
+</div>
+<div id="slider-track" class="slider-track">
+    <div id="slider-handle" class="slider-handle"></div>
+</div>
+<script type="text/javascript">
+    //兼容IE7+、Chrome、Firefox、Safair、Opera
+    function HouwaSlider(SliderTrack, SliderHandle, FloorOpacity) {
+        this.sliderTrack = SliderTrack;
+        this.sliderHandle = SliderHandle;
+        this.floorOpacity = FloorOpacity;
+
+        var _self = this,
+            _targetClass = '', //mousedown目标className
+            _target = null, //存储目标事件对象
+            _getCursorLeft = 0, //记录滑动手柄的left值
+            _sliderTrackLeft = 0, //滑动器left值
+            _sliderTrackWidth  = 0, //滑动器宽度
+            _sliderHandleWidth = 0, //滑动手柄宽度
+            _x = 0; //保存bar的left值
+
+        //事件目标交互
+        this.trackEvent = function(e) {
+            e = e || window.event;
+            _target = MM.target(e);
+            _targetClass = _target.className;
+            _target.className = _targetClass + ' ' + 'mousedown';
+            _self.sliderHandleEvent(e);
+
+            //mousedown 防止内容被选中
+            document.onselectstart = function () {
+                return false;
+            };
+            //FF不支持，使用-moz-user-select:none;
+            document.getElementsByTagName('body')[0].style.MozUserSelect = 'none';
+        };
+        //计算sliderBtn的left值
+        this.sliderHandleEvent = function(e) {
+            var cursorLeft = e.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft);
+            _getCursorLeft = cursorLeft - MM.getDocOffset(_self._sliderHandle).left;
+            MM.bind(document, "mousemove", _self.sliderTrackDrag);
+        };
+        //拖动sliderBtn
+        this.sliderTrackDrag = function(e){
+            e = e || window.event;
+            var cursorMoveLeft = e.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft) - _sliderTrackLeft;
+            with(_self._sliderHandle.style) {
+                if (cursorMoveLeft >= _sliderTrackWidth - _sliderHandleWidth + _getCursorLeft){
+                    left = _sliderTrackWidth - _sliderHandleWidth + "px";
+                }else if (cursorMoveLeft <= _getCursorLeft){
+                    left = "0px";
+                }else{
+                    left = cursorMoveLeft - _getCursorLeft + "px";
+                }
+                _x = parseInt(left);
+            }
+            //透明度和left值交互
+            var opacityVal = _x * 1 / _sliderTrackWidth;
+            MM.setOpacity(_self._floorOpacity, opacityVal);
+        };
+        //停止滑动
+        this.stopScroll = function(){
+            MM.unbind(document, "mousemove", _self.sliderTrackDrag);
+            MM.unbind(document, 'mouseup', _self.trackEvent);
+
+            _target.className = _targetClass;
+        };
+        //入口
+        this.init = function() {
+            _self._sliderTrack = MM.$(_self.sliderTrack); //获取滑动器Element
+            _self._sliderHandle = MM.$(_self.sliderHandle); //获取滑动手柄Element
+            _self._floorOpacity = MM.$(_self.floorOpacity); //获取交互图片标签
+
+            _sliderTrackLeft = MM.getDocOffset(_self._sliderTrack).left; //滑动器left值
+            _sliderTrackWidth  = _self._sliderTrack.offsetWidth; //滑动器宽度
+            _sliderHandleWidth = _self._sliderHandle.offsetWidth; //滑动手柄宽度
+
+            //事件绑定
+            MM.bind(_self._sliderHandle, 'mousedown', _self.trackEvent);
+            //解除绑定
+            MM.bind(document, 'mouseup', _self.stopScroll);
+        };
+    }
+
+    //使用
+    var houwa = new HouwaSlider();
+    houwa.sliderTrack = 'slider-track';
+    houwa.sliderHandle = 'slider-handle';
+    houwa.floorOpacity = 'blur-img';
+    houwa.init();
+</script>
+</body>
+</html>

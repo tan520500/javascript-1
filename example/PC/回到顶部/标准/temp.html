@@ -1,0 +1,45 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        *html{background-image:url(about:blank);background-attachment:fixed;}
+        body{height:6000px;}
+        #goTop{
+            POSITION:fixed;
+            TEXT-ALIGN:center;
+            LINE-HEIGHT:30px;
+            WIDTH:30px;
+            BOTTOM:50px;
+            HEIGHT:33px;
+            FONT-SIZE:12px;
+            CURSOR:pointer;
+            RIGHT:50px;
+            background-color:#000;
+            _position:absolute;
+            _top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||20)-(parseInt(this.currentStyle.marginBottom,10)||0)));
+        }
+    </style>
+</head>
+<body>
+
+<div style="display:none" id="goTop"></div>
+<script type="text/javascript">
+    function goTop(Id){
+        var btn = document.getElementById(Id);
+        window.onscroll = function(){
+            MM.rollTop() > 0 ? btn.style.display = 'block' : btn.style.display = 'none';
+        };
+        btn.onclick = function(){
+            MM.rollTop(0);
+        };
+    }
+
+    //使用
+    goTop('goTop');
+</script>
+</body>
+</html>

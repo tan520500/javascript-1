@@ -1,0 +1,48 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css"/>
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        #countTime,.time{height:40px;margin:20px auto;line-height:40px;border:10px solid #ccc;font-size:20px;text-align:center;color:#c00;}
+        #countTime span{color:#000;}
+    </style>
+</head>
+<body>
+<div id="countTime"></div>
+<script>
+    /**
+     * 倒计时
+     * @param ShowId 展示容器id值
+     * @param EndTimes 截止时间
+     */
+    function countDown(ShowId, EndTimes){
+        var zero = function(Val){
+            return Val < 10 ? '0' + Val : Val;
+        };
+        function lastTimes(){
+            var startTimes = new Date(),
+                endTimes = EndTimes,
+                endTimesArr = endTimes.split('-'),
+                newEndTimes = new Date(endTimesArr[1] + '/' + endTimesArr[2] + '/' + endTimesArr[0]);
+            var gapTimes = newEndTimes.getTime() - startTimes.getTime(),
+                lastDate = parseInt(gapTimes / 1000 / 3600 / 24),
+                lastHour = parseInt(gapTimes / 1000 / 3600 % 24),
+                lastMin = parseInt(gapTimes / 1000 / 60 % 60),
+                lastSec = parseInt(gapTimes / 1000 % 60);
+            document.getElementById(ShowId).innerHTML = '距离' + endTimes + '还有：' +
+                zero(lastDate) + '天' +
+                zero(lastHour) + '小时' +
+                zero(lastMin) + '分' +
+                zero(lastSec) + '秒';
+            setTimeout(lastTimes, 1000);
+        }
+        setTimeout(lastTimes, 1000);
+    }
+    //使用
+    countDown('countTime', '2018-01-01');
+</script>
+</body>
+</html>

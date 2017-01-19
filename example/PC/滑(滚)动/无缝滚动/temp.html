@@ -1,0 +1,343 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .demo li{width:50px;height:50px;float:left;text-align:center;line-height:50px;font-size:14px;font-family:'SimSun'}
+        #demoA,
+        #demoAA{width:50px;height:300px;overflow:hidden;margin:50px;border:1px solid #c00;float:left;}
+
+        #demoB,
+        #demoBB{width:50px;height:300px;overflow:hidden;margin:50px;border:1px solid #c00;float:left;}
+
+        #demoC,
+        #demoCC{margin:50px;overflow:hidden;WIDTH:300px;align:center;border:1px solid #c00;clear:both;}
+        #demoC li,
+        #demoCC li{list-style:none;width:50px;height:50px;float:left;line-height:50px;text-align:center}
+
+        #demoD,
+        #demoDD{margin:50px;overflow:hidden;WIDTH:300px;align:center;border:1px solid #c00;clear:both;}
+        #demoD li,
+        #demoDD li{list-style:none;width:50px;height:50px;float:left;line-height:50px;text-align:center}
+    </style>
+</head>
+<body>
+
+<!--  纵向滚动 由下而上 -->
+<div id="demoA" class="demo" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 ↑</li>
+        <li index="2">2 ↑</li>
+        <li index="3" style="background:#ccc;">3 ↑</li>
+        <li index="4">4 ↑</li>
+        <li index="5" style="background:#ccc;">5 ↑</li>
+        <li index="6">6 ↑</li>
+    </ul>
+</div>
+<div id="demoAA" class="demo" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 ↑</li>
+        <li index="2">2 ↑</li>
+        <li index="3" style="background:#ccc;">3 ↑</li>
+        <li index="4">4 ↑</li>
+        <li index="5" style="background:#ccc;">5 ↑</li>
+        <li index="6">6 ↑</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向上滚动
+     * @param ScrollId 滚动区域id值
+     * @param Height 滚动高度
+     * @param Speed 滚动速度（默认值50）
+     * @constructor ScrollUp
+     */
+    function ScrollUp(ScrollId, Height, Speed){
+        this.scrollId = ScrollId;
+        this.scrollHeight = Height;
+        this.speed = Speed || 50;
+
+        var _pause = false;
+        var _scroll = null;
+        var _scrollBox = null;
+        var _scrollHeight = 0;
+        this.init = function (){
+            _scroll = MM.$(this.scrollId);
+            _scrollBox = MM.getElem('ul', _scroll)[0];
+            _scrollBox.innerHTML += _scrollBox.innerHTML;
+            _scrollHeight = this.scrollHeight;
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                if(_scroll.scrollTop == _scrollHeight){
+                    _scroll.scrollTop = 0;
+                }
+                _scroll.scrollTop++;
+            };
+            setInterval(_move, this.speed);
+            MM.bind(_scroll, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scroll, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //使用
+    var scrollUp = new ScrollUp();
+    scrollUp.scrollId = 'demoA';
+    scrollUp.scrollHeight = 300;
+    scrollUp.speed = 20;
+    scrollUp.init();
+
+    var scrollUp2 = new ScrollUp();
+    scrollUp2.scrollId = 'demoAA';
+    scrollUp2.scrollHeight = 300;
+    scrollUp2.speed = 10;
+    scrollUp2.init();
+</script>
+
+
+<!--  纵向滚动 由上而下 -->
+<div id="demoB" class="demo" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 ↓</li>
+        <li index="2">2 ↓</li>
+        <li index="3" style="background:#ccc;">3 ↓</li>
+        <li index="4">4 ↓</li>
+        <li index="5" style="background:#ccc;">5 ↓</li>
+        <li index="6">6 ↓</li>
+    </ul>
+</div>
+<div id="demoBB" class="demo" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 ↓</li>
+        <li index="2">2 ↓</li>
+        <li index="3" style="background:#ccc;">3 ↓</li>
+        <li index="4">4 ↓</li>
+        <li index="5" style="background:#ccc;">5 ↓</li>
+        <li index="6">6 ↓</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向下滚动
+     * @param ScrollId 滚动区域id值
+     * @param Height 滚动高度
+     * @param Speed 滚动速度
+     * @constructor ScrollDown
+     */
+    function ScrollDown(ScrollId, Height, Speed){
+        this.scrollId = ScrollId;
+        this.height = Height;
+        this.speed = Speed || 50;
+
+        var _pause = false;
+        var _scroll = null;
+        var _scrollBox = null;
+        var _scrollHeight = 0;
+        this.init = function (){
+            _scroll = MM.$(this.scrollId);
+            _scrollBox = MM.getElem('ul', _scroll)[0];
+            _scrollBox.innerHTML += _scrollBox.innerHTML;
+            _scrollHeight = this.scrollHeight;
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                if(_scroll.scrollTop == 0){
+                    _scroll.scrollTop = _scrollHeight;
+                }
+                _scroll.scrollTop--;
+            };
+            setInterval(_move, this.speed);
+            MM.bind(_scroll, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scroll, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //向下
+    var scrollDown = new ScrollDown();
+    scrollDown.scrollId = 'demoB';
+    scrollDown.scrollHeight = 300;
+    scrollDown.speed = 20;
+    scrollDown.init();
+
+    var scrollDown2 = new ScrollDown();
+    scrollDown2.scrollId = 'demoBB';
+    scrollDown2.scrollHeight = 300;
+    scrollDown2.speed = 10;
+    scrollDown2.init();
+</script>
+
+
+<div style="clear:both;"></div>
+
+
+<!--  横向滚动 由右至左 -->
+<div id="demoC" class="demo" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 ←</li>
+        <li index="2">2 ←</li>
+        <li index="3" style="background:#ccc;">3 ←</li>
+        <li index="4">4 ←</li>
+        <li index="5" style="background:#ccc;">5 ←</li>
+        <li index="6">6 ←</li>
+    </ul>
+</div>
+
+<div id="demoCC" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 ←</li>
+        <li index="2">2 ←</li>
+        <li index="3" style="background:#ccc;">3 ←</li>
+        <li index="4">4 ←</li>
+        <li index="5" style="background:#ccc;">5 ←</li>
+        <li index="6">6 ←</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向左滚动
+     * @param ScrollId 滚动区域id值
+     * @param Width 滚动宽度
+     * @param Speed 滚动速度
+     * @constructor ScrollLeft
+     */
+    function ScrollLeft(ScrollId, Width, Speed){
+        this.scrollId = ScrollId;
+        this.scrollWidth = Width;
+        this.speed = Speed || 50;
+
+        var _pause = false;
+        var _scroll = null;
+        var _scrollBox = null;
+        var _scrollWidth = 0;
+        this.init = function (){
+            _scroll = MM.$(this.scrollId);
+            _scrollBox = MM.getElem('ul', _scroll)[0];
+            _scrollBox.innerHTML += _scrollBox.innerHTML;
+            _scrollWidth = this.scrollWidth;
+            _scrollBox.style.width = _scrollWidth * 2 + 'px';
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                if(_scroll.scrollLeft == _scrollWidth){
+                    _scroll.scrollLeft = 0;
+                }
+                _scroll.scrollLeft++;
+            };
+            setInterval(_move, this.speed);
+            MM.bind(_scroll, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scroll, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //使用
+    var scrollLeft = new ScrollLeft();
+    scrollLeft.scrollId = 'demoC';
+    scrollLeft.scrollWidth = 300;
+    scrollLeft.speed = 20;
+    scrollLeft.init();
+
+    var scrollLeft2 = new ScrollLeft();
+    scrollLeft2.scrollId = 'demoCC';
+    scrollLeft2.scrollWidth = 300;
+    scrollLeft2.speed = 10;
+    scrollLeft2.init();
+</script>
+
+
+<!--  横向滚动 由左至右 -->
+<div id="demoD" class="demo" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 →</li>
+        <li index="2">2 →</li>
+        <li index="3" style="background:#ccc;">3 →</li>
+        <li index="4">4 →</li>
+        <li index="5" style="background:#ccc;">5 →</li>
+        <li index="6">6 →</li>
+    </ul>
+</div>
+
+<div id="demoDD" style="align:center">
+    <ul>
+        <li index="1" style="background:#ccc;">1 →</li>
+        <li index="2">2 →</li>
+        <li index="3" style="background:#ccc;">3 →</li>
+        <li index="4">4 →</li>
+        <li index="5" style="background:#ccc;">5 →</li>
+        <li index="6">6 →</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向右滚动
+     * @param ScrollId 滚动区域id值
+     * @param Width 滚动宽度
+     * @param Speed 滚动速度
+     * @constructor ScrollRight
+     */
+    function ScrollRight(ScrollId, Width, Speed){
+        this.scrollId = ScrollId;
+        this.scrollWidth = Width;
+        this.speed = Speed || 50;
+
+        var _pause = false;
+        var _scroll = null;
+        var _scrollBox = null;
+        var _scrollWidth = 0;
+        this.init = function (){
+            _scroll = MM.$(this.scrollId);
+            _scrollBox = MM.getElem('ul', _scroll)[0];
+            _scrollBox.innerHTML += _scrollBox.innerHTML;
+            _scrollWidth = this.scrollWidth;
+            _scrollBox.style.width = _scrollWidth * 2 + 'px';
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                if(_scroll.scrollLeft == 0){
+                    _scroll.scrollLeft = _scrollWidth;
+                }
+                _scroll.scrollLeft--;
+            };
+            setInterval(_move, this.speed);
+            MM.bind(_scroll, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scroll, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //使用
+    var scrollRight = new ScrollRight();
+    scrollRight.scrollId = 'demoD';
+    scrollRight.scrollWidth = 300;
+    scrollRight.speed = 20;
+    scrollRight.init();
+
+    var scrollRight2 = new ScrollRight();
+    scrollRight2.scrollId = 'demoDD';
+    scrollRight2.scrollWidth = 300;
+    scrollRight2.speed = 10;
+    scrollRight2.init();
+</script>
+</body>
+</html>

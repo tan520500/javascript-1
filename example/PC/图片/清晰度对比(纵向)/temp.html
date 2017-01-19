@@ -1,0 +1,121 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .picture{width:600px;height:400px;margin:20px auto 0;position:relative;}
+        .picture .clear-img{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;}
+        .picture .blur-img{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;}
+        .picture .blur-img img{position:absolute;}
+        .picture img{display:block;width:100%;height:100%;}
+        .picture .line{width:100%;height:1px;position:absolute;top:0;left:0;z-index:3;}
+        #slider-track{width:2px;height:420px;background:transparent;position:absolute;top:-10px;left:50%;z-index:3;}
+        #slider-track .slider-handle{position:absolute;top:0px;left:-9px;width:20px;height:20px;border-radius:15px;background:#FFA000;}
+        #slider-track .mousedown{background:#FFA000;}
+    </style>
+</head>
+<body>
+
+<div class="picture">
+    <div class="clear-img"><img src="./images/end.png" alt=""/></div>
+    <div class="blur-img"><img id="clip-pic" src="./images/start.png" alt=""/></div>
+    <div id="line" class="line"></div>
+    <div id="slider-track" class="slider-track">
+        <div id="slider-handle" class="slider-handle"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    //兼容IE7+、Chrome、Firefox、Safair、Opera
+    function BlearSlider(SliderTrack, SliderHandle, ClipPic, CuttingLine) {
+        this.sliderTrack = SliderTrack;
+        this.sliderHandle = SliderHandle;
+        this.clipPic = ClipPic;
+        this.cuttingLine = CuttingLine;
+
+        var _self = this,
+            _target = null, //mousedown事件目标
+            _targetClass = '', //mousedown目标className
+            _getCursorTop = 0, //记录滑动手柄的left值
+            _sliderTrackTop = 0, //滑动器left值
+            _sliderTrackHeight  = 0, //滑动器宽度
+            _sliderHandleHeight = 0, //滑动手柄宽度
+            _y = 0; //保存bar的top值
+
+        //事件目标交互
+        this.trackEvent = function(e) {
+            e = e || window.event;
+            _target = MM.target(e);
+            _targetClass = _target.className;
+            _target.className = _targetClass + ' ' + 'mousedown';
+            _self._cuttingLine.style.backgroundColor = '#fff';
+            _self._cuttingLine.style.opacity = '0.5';
+            _self.sliderHandleEvent(e);
+            //mousedown 防止内容被选中
+            document.onselectstart = function () {
+                return false;
+            };
+            //FF不支持，使用-moz-user-select:none;
+            document.getElementsByTagName('body')[0].style.MozUserSelect = 'none';
+        };
+        //计算sliderBtn的top值
+        this.sliderHandleEvent = function(e) {
+            var cursorTop = e.clientY + (document.body.scrollTop || document.documentElement.scrollTop);
+            _getCursorTop = cursorTop - MM.getDocOffset(_self._sliderHandle).top;
+            MM.bind(document, "mousemove", _self.sliderTrackDrag);
+        };
+        //拖动sliderBtn
+        this.sliderTrackDrag = function(e){
+            e = e || window.event;
+            var cursorMoveTop = e.clientY + (document.body.scrollTop || document.documentElement.scrollTop) - _sliderTrackTop;
+            with(_self._sliderHandle.style) {
+                if (cursorMoveTop >= _sliderTrackHeight - _sliderHandleHeight + _getCursorTop){
+                    top = _sliderTrackHeight - _sliderHandleHeight + "px";
+                }else if (cursorMoveTop <= _getCursorTop){
+                    top = "0px";
+                }else{
+                    top = cursorMoveTop - _getCursorTop + "px";
+                }
+                _y = parseInt(top);
+            }
+            //图片裁剪
+            var clipVal = _y * _self._clipPic.offsetHeight / (_sliderTrackHeight - 20);
+            _self._clipPic.style.clip = "rect(" + clipVal + "px, " + _self._clipPic.offsetWidth + "px, " + _self._clipPic.offsetHeight + "px, " + "0)";
+            _self._cuttingLine.style.top = clipVal + 'px';
+        };
+        //停止滑动
+        this.stopScroll = function(){
+            MM.unbind(document, "mousemove", _self.sliderTrackDrag);
+            MM.unbind(document, 'mouseup', _self.trackEvent);
+            _target.className = _targetClass;
+            _self._cuttingLine.style.backgroundColor = '#fff'; //mousedown分割线色值
+        };
+        //入口
+        this.init = function() {
+            _self._sliderTrack = MM.$(_self.sliderTrack); //获取滑动器Element
+            _self._sliderHandle = MM.$(_self.sliderHandle); //获取滑动手柄Element
+            _self._clipPic = MM.$(_self.clipPic); //被裁剪图片
+            _self._cuttingLine = MM.$(_self.cuttingLine); //展示分割线
+            _sliderTrackTop = MM.getDocOffset(_self._sliderTrack).top; //滑动器Top值
+            _sliderTrackHeight  = _self._sliderTrack.offsetHeight; //滑动器宽度
+            _sliderHandleHeight = _self._sliderHandle.offsetHeight; //滑动手柄宽度
+            //事件绑定
+            MM.bind(_self._sliderHandle, 'mousedown', _self.trackEvent);
+            //解除绑定
+            MM.bind(document, 'mouseup', _self.stopScroll);
+        };
+    }
+
+
+    //使用
+    var blear = new BlearSlider();
+    blear.sliderTrack = 'slider-track';
+    blear.sliderHandle = 'slider-handle';
+    blear.clipPic = 'clip-pic';
+    blear.cuttingLine = 'line';
+    blear.init();
+</script>
+</body>
+</html>

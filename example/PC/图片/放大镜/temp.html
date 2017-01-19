@@ -1,0 +1,72 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css"/>
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        #demo{width:400px;height:255px;margin:50px;position:relative;border:1px solid #ccc;}
+        #small-box{width:400px;height:255px;}
+        #float-box{display:none;width:160px;height:120px;position:absolute;background:#ffffcc;border:1px solid #c00;filter:alpha(opacity=50);opacity:0.5;cursor:move;}
+        #mark{position:absolute;display:block;width:400px;height:255px;background-color:#fff;filter:alpha(opacity=0);opacity:0;z-index:10;cursor:move;}
+        #big-box{display:none;position:absolute;top:0;left:460px;width:400px;height:300px;overflow:hidden;border:1px solid #ccc;z-index:1;}
+        #big-box img{position:absolute;z-index:5;}
+    </style>
+</head>
+<body>
+
+<div id="demo">
+    <div id="small-box">
+        <div id="mark"></div>
+        <div id="float-box"></div>
+        <img src="images/macbook-small.jpg"/>
+    </div>
+    <div id="big-box">
+        <img src="images/macbook-big.jpg"/>
+    </div>
+</div>
+<div id="number"></div>
+<script type="text/javascript">
+    (function(){
+        var demo = MM.$('demo'),
+            smallBox = MM.$('small-box'),
+            floatBox = MM.$('float-box'),
+            bigBox = MM.$('big-box'),
+            bigImg = MM.getElem('img', bigBox)[0];
+        MM.bind(smallBox, 'mouseover', function(){
+            floatBox.style.display = 'block';
+            bigBox.style.display = 'block';
+        });
+        MM.bind(smallBox, 'mouseout', function(){
+            floatBox.style.display = 'none';
+            bigBox.style.display = 'none';
+        });
+        MM.bind(smallBox, 'mousemove', function(e){
+            var e = e || window.event;
+            //IE非标准模式下,clientX/clientY取值存在误差,它们的最小值是2而不是零
+            var floatLeft = e.clientX - demo.offsetLeft - (floatBox.offsetWidth / 2);
+            var floatTop = e.clientY - demo.offsetTop - (floatBox.offsetHeight / 2);
+            if (floatLeft < 0) {
+                floatLeft = 0;
+            } else if (floatLeft > (smallBox.offsetWidth - floatBox.offsetWidth)) {
+                floatLeft = smallBox.offsetWidth - floatBox.offsetWidth;
+            }
+            if (floatTop < 0) {
+                floatTop = 0;
+            } else if (floatTop > (smallBox.offsetHeight - floatBox.offsetHeight)) {
+                floatTop = smallBox.offsetHeight - floatBox.offsetHeight;
+            }
+            floatBox.style.left = floatLeft + 'px';
+            floatBox.style.top = floatTop + 'px';
+            var percentX = floatLeft * (bigImg.offsetWidth - bigBox.offsetWidth);
+            var percentY = floatTop * (bigImg.offsetHeight - bigBox.offsetHeight);
+            bigImg.style.left = -percentX / (smallBox.offsetWidth - floatBox.offsetWidth) + 'px';
+            bigImg.style.top = -percentY / (smallBox.offsetHeight - floatBox.offsetHeight) + 'px';
+            //鼠标指针坐标值
+            MM.$('number').innerHTML = e.clientX + 'px ' + e.clientY + 'px';
+        });
+    }());
+</script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css"/>
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .box{width:400px;margin:20px auto;border:5px solid #ccc;padding:20px;font-size:12px;}
+        .row{height:40px;overflow:hidden;}
+        .row .left{float:left;width:100px;height:28px;text-align:right;line-height:28px;}
+        .row .right{float:right;width:300px;height:28px;}
+        .f-text{border:1px solid #ccc;width:200px;height:26px;outline:none;}
+        .f-textarea{width:200px;height:66px;line-height:22px;border:1px solid #ccc;outline:none;}
+        .f-btn{height:28px;padding:0 10px;}
+    </style>
+</head>
+<body>
+
+<div id="form-box" class="box">
+    <div id="form" action="">
+        <div class="clear row">
+            <div class="left">文本域1(单行)：</div>
+            <div class="right"><input type="text" name="text1" class="f-text" value="文本域1" /></div>
+        </div>
+        <div class="clear row">
+            <div class="left">文本域2(单行)：</div>
+            <div class="right"><input type="text" name="text2" class="f-text" value="文本域2" /></div>
+        </div>
+        <div class="clear row">
+            <div class="left">文本域1(密码)：</div>
+            <div class="right"><input type="password" name="password1" class="f-text" value="123456" /></div>
+        </div>
+        <div class="clear row">
+            <div class="left">文本域2(密码)：</div>
+            <div class="right"><input type="password" name="password2" class="f-text" value="567890" /></div>
+        </div>
+        <div class="clear row">
+            <div class="left">文件域1：</div>
+            <div class="right" style="padding:4px 0 0;"><input type="file" name="image1" /></div>
+        </div>
+        <div class="clear row">
+            <div class="left">文件域2：</div>
+            <div class="right" style="padding:4px 0 0;"><input type="file" name="image2" /><span></span></div>
+        </div>
+        <div class="clear row" style="height:auto;">
+            <div class="left">文本域1(多行)：</div>
+            <div class="right" style="height:auto;"><textarea name="area1" cols="30" rows="10" class="f-textarea">多行文本域1</textarea></div>
+        </div>
+        <div class="clear row" style="height:auto;">
+            <div class="left">文本域2(多行)：</div>
+            <div class="right" style="height:auto;"><textarea name="area2" cols="30" rows="10" class="f-textarea">多行文本域2</textarea></div>
+        </div>
+        <div class="clear row" style="padding:15px 0 0;">
+            <div class="left">复选框：</div>
+            <div class="right" style="padding:8px 0 0;">
+                <input type="checkbox" name="sports" value="篮球" />篮球&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" name="sports" value="足球" />足球&nbsp;&nbsp;&nbsp;&nbsp;
+                <input checked type="checkbox" name="sports" value="排球" />排球&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" name="sports" value="棒球" />棒球
+            </div>
+        </div>
+
+        <div class="clear row">
+            <div class="left">单选框：</div>
+            <div class="right" style="padding:8px 0 0;">
+                <input checked type="radio" name="sex" value="男" />男&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="sex" value="女" />女&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="sex" value="其他" />其他
+            </div>
+        </div>
+        <div class="clear row">
+            <div class="left">列表菜单：</div>
+            <div class="right">
+                <select name="select1" style="border:1px solid #ccc;height:28px;outline:none;">
+                    <option value="sel01" selected="selected">数值1</option>
+                    <option value="sel02">数值2</option>
+                    <option value="sel03">数值3</option>
+                    <option value="sel04">数值4</option>
+                    <option value="sel05">数值5</option>
+                </select>
+                <select name="select2" style="border:1px solid #ccc;height:28px;outline:none;">
+                    <option value="sel01">数值11</option>
+                    <option value="sel02" selected="selected">数值22</option>
+                    <option value="sel03">数值33</option>
+                    <option value="sel04">数值44</option>
+                    <option value="sel05">数值55</option>
+                </select>
+                <select name="select3" style="border:1px solid #ccc;height:28px;outline:none;">
+                    <option value="sel01">数值111</option>
+                    <option value="sel02">数值222</option>
+                    <option value="sel03" selected="selected">数值333</option>
+                    <option value="sel04">数值444</option>
+                    <option value="sel05">数值555</option>
+                </select>
+            </div>
+        </div>
+        <div class="clear row">
+            <div class="left"></div>
+            <div class="right">
+                <input name="btn" type="submit" value="表单" class="f-btn" id="btn" style="outline:none;" />
+                <input name="btn" type="button" value="value" class="f-btn" id="btn2" style="outline:none;" />
+                <input name="btn" type="reset" value="序列字符串" class="f-btn" id="btn3" style="outline:none;" />
+                <button name="btn" value="button">button</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        /**
+         * 获取 form 表单的所有元素(仅 input, checkbox 等可以表单提交的元素)
+         * @param FormField(id或name) 表单(没有参数则是整个页面的所有 form),给出的不是 form 元素而是 div,table 之类的元素也可以
+         * @return 返回一个数组,里面保存着获取的元素
+         */
+        function getForms(FormField) {
+            //储存元素
+            var elements = [];
+            // 如果传入的是字符串,则根据此字符串获取对象
+            if (typeof FormField === 'string'){
+                FormField = document.getElementById(FormField) || document.getElementsByName(FormField)[0];
+            }
+            if(!!(FormField && FormField.nodeType == 1)){
+                //如果FormField是id值且是form标签
+                if (FormField.tagName == 'FORM') {
+                    elements = FormField.elements;
+                }else{ //如果给出的不是form,而是div之类的,照样获取里面可提交的元素
+                    var inputs = FormField.getElementsByTagName('INPUT');
+                    if(inputs && inputs.length > 0){
+                        for(var i=0; i<inputs.length; i++){
+                            elements.push(inputs[i]);
+                        }
+                    }
+                    var selects = FormField.getElementsByTagName('SELECT');
+                    if (selects && selects.length > 0) {
+                        for(var i=0, length = selects.length; i<length; i++){
+                            elements.push(selects[i]);
+                        }
+                    }
+                    var textareas = FormField.getElementsByTagName('TEXTAREA');
+                    if (textareas && textareas.length > 0) {
+                        for(var i=0, length = textareas.length; i<length; i++){
+                            elements.push(textareas[i]);
+                        }
+                    }
+                    var buttons = FormField.getElementsByTagName('BUTTON');
+                    if (buttons && buttons.length > 0) {
+                        for(var i=0, length = buttons.length; i<length; i++){
+                            elements.push(buttons[i]);
+                        }
+                    }
+                }
+            }else{//获取页面全部form
+                var formArray = document.forms;
+                for (var i = 0; i < formArray.length; i++) {
+                    FormField = formArray[i];
+                    for (var j = 0, length = FormField.length; j < length; j++) {
+                        elements.push(FormField[j]);
+                    }
+                }
+            }
+            // 返回元素列表
+            return elements;
+        };
+        /**
+         * 获取元素的value
+         * @param name 元素的ID或者name
+         * @param init 默认值
+         * @return 元素的值(value 或者 innerHTML 或者 checkbox、radio选中的值)
+         */
+        function getValue(name) {
+            //返回值
+            var arrValue = {};
+            //收集多选checkbox
+            var check = [];
+            var data = getForms(name);
+            //如果没有找到所要的元素，则直接返回默认值
+            if (!data){
+                return '没有可以获取的value!';
+            }
+            for(var i=0,leg=data.length; i<leg; i++){
+                //排除按钮
+                var regStr = /button|submit|reset|image|BUTTON/;
+                if(regStr.test(data[i].type) || regStr.test(data[i].tagName)){
+                    continue;
+                }
+                //如果是checkbox
+                if(data[i].type === "checkbox") {
+                    if(data[i].checked){
+                        check.push(data[i].value);
+                    }else{
+                        continue;
+                    }
+                    arrValue['checkVal'] = check;
+                    continue;
+                }
+                //如果是radio
+                if(data[i].type === 'radio') {
+                    if(data[i].checked){
+                        arrValue[data[i].name] = data[i].value;
+                    }else{
+                        continue;
+                    }
+                }
+                //如果是textarea
+                if(data[i].type === 'textarea') {
+                    arrValue[data[i].name] = data[i].value;
+                    continue;
+                }
+                //如果是select
+                if(data[i].tagName === 'SELECT') {
+                    arrValue[data[i].name] = data[i].options[data[i].selectedIndex].value;
+                    continue;
+                }
+                arrValue[data[i].name] = data[i].value;
+            }
+            return arrValue;
+        };
+        /**
+         * 表单数据序列化
+         * @param form 表单的id,name 或者表单对象,给出的不是 form 元素而是 div,table 之类的元素也可以
+         * @param encode 是否将值转成 URL 编码
+         * @return 表单序列化后的字符串
+         */
+        function serialize(form, encode) {
+            //元素列表
+            var elements = getForms(form);
+            // 拼接参数
+            var param = "";
+            for (var i = 0, length = elements.length; i < length; i++) {
+                if (elements[i].type) {
+                    var type = elements[i].type.toLowerCase();
+                    // 选择项,没选中时跳过
+                    if (type == "radio" || type == "checkbox") {
+                        if (!elements[i].checked){
+                            continue;
+                        }
+                    }
+                    // 按钮不需要序列化
+                    if ("button" === type || "submit" === type || "reset" === type){
+                        continue;
+                    }
+                }
+                // 保存名称和值
+                var name = elements[i].name;
+                var value = elements[i].value;
+                // 如果需要转变中文编码
+                value = encode ? encodeURIComponent(value) : value;
+                if (param.length > 0) param += "&";
+                param += name + "=" + value;
+            }
+            return param;
+        };
+
+        //使用
+        var btn = MM.$('btn');
+        var btn2 = MM.$('btn2');
+        var btn3 = MM.$('btn3');
+
+        MM.bind(btn, 'click', function(e){
+            var data = getForms('form');
+            console.log(data);
+            e.preventDefault();
+        });
+
+        MM.bind(btn2, 'click', function(e){
+            var val = getValue('form');
+            console.log(val);
+            e.preventDefault();
+        });
+
+        MM.bind(btn3, 'click', function(e){
+            var str = serialize('form', false);
+            console.log(str);
+            return false;
+        });
+    }());
+</script>
+</body>
+</html>

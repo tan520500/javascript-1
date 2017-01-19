@@ -1,0 +1,395 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .scrollArea{ width:300px;height:30px;border:1px solid #333333;overflow:hidden;margin:20px auto 0;font-size:14px;}
+        .list{height:30px;}
+        .list li{ width:300px;height:30px;line-height:30px;float:left;text-align:center;color:#fff;}
+    </style>
+</head>
+<body>
+
+<!--  纵向  -->
+<div class="scrollArea" id="demoA">
+    <ul class="list">
+        <li style="background-color:#c00;">1 ↑</li>
+        <li style="background-color:#13e500;">2 ↑</li>
+        <li style="background-color:#1771ff;">3 ↑</li>
+        <li style="background-color:#e59005;">4 ↑</li>
+        <li style="background-color:#e500a3;">5 ↑</li>
+    </ul>
+</div>
+
+<div class="scrollArea" id="demoAA">
+    <ul class="list">
+        <li style="background-color:#c00;">1 ↑</li>
+        <li style="background-color:#13e500;">2 ↑</li>
+        <li style="background-color:#1771ff;">3 ↑</li>
+        <li style="background-color:#e59005;">4 ↑</li>
+        <li style="background-color:#e500a3;">5 ↑</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向上滚动
+     * @param ScrollId 滚动区域id值
+     * @param Height 滚动高度
+     * @param GapTime 滚动间隙时间
+     * @param Speed 滚动速度
+     */
+    function gapScrollUp(ScrollId, Height, GapTime, Speed){
+        this.scrollId = ScrollId;
+        this.scrollHeight = Height;
+        this.gapTime = GapTime || 2000;
+        this.speed = Speed || 20;
+
+        var _scrollId = null;
+        var _scrollCont = null;
+        var _column = null;
+        var _timer = null;
+        var _pause = false;
+        var _gapTime = 0;
+        var _scrollHeight = 0;
+        var _speed = 0;
+        this.init = function (){
+            _scrollId = MM.$(this.scrollId);
+            _scrollCont = MM.getElem('ul', _scrollId )[0];
+            _column = MM.getElem('li', _scrollCont);
+            _gapTime = this.gapTime;
+            _scrollHeight = this.scrollHeight;
+            _speed = this.speed;
+            _scrollCont.innerHTML += _scrollCont.innerHTML;
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                _scrollId.scrollTop++;
+                if(_scrollId.scrollTop % _scrollHeight == 0){
+                    clearInterval(_timer);
+                    setTimeout(_start, _gapTime * 1000);
+                }
+                if(_scrollId.scrollTop == _scrollHeight * _column.length / 2){
+                    _scrollId.scrollTop = 0;
+                }
+            }
+            var _start = function(){
+                _timer = setInterval(_move, _speed);
+            };
+            setTimeout(_start, _gapTime * 1000);
+            MM.bind(_scrollId, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scrollId, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //使用
+    var gapUp = new gapScrollUp();
+    gapUp.scrollId = 'demoA';
+    gapUp.scrollHeight = 30;
+    gapUp.gapTime = 1;
+    gapUp.speed = 10;
+    gapUp.init();
+
+    var gapUp2 = new gapScrollUp();
+    gapUp2.scrollId = 'demoAA';
+    gapUp2.scrollHeight = 30;
+    gapUp2.gapTime = 2;
+    gapUp2.speed = 20;
+    gapUp2.init();
+</script>
+
+<br/><br/>
+
+<div class="scrollArea" id="demoB">
+    <ul class="list">
+        <li style="background-color:#e500a3;">5 ↓</li>
+        <li style="background-color:#e59005;">4 ↓</li>
+        <li style="background-color:#1771ff;">3 ↓</li>
+        <li style="background-color:#13e500;">2 ↓</li>
+        <li style="background-color:#c00;">1 ↓</li>
+    </ul>
+</div>
+
+<div class="scrollArea" id="demoBB">
+    <ul class="list">
+        <li style="background-color:#e500a3;">5 ↓</li>
+        <li style="background-color:#e59005;">4 ↓</li>
+        <li style="background-color:#1771ff;">3 ↓</li>
+        <li style="background-color:#13e500;">2 ↓</li>
+        <li style="background-color:#c00;">1 ↓</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向下滚动
+     * @param ScrollId 滚动区域id值
+     * @param Height 滚动高度
+     * @param GapTime 滚动间隙时间
+     * @param Speed 滚动速度
+     */
+    function gapScrollDown(ScrollId, Height, GapTime, Speed){
+        this.scrollId = ScrollId;
+        this.scrollHeight = Height;
+        this.gapTime = GapTime || 2000;
+        this.speed = Speed || 20;
+
+        var _scrollId = null;
+        var _scrollCont = null;
+        var _column = null;
+        var _timer = null;
+        var _pause = false;
+        var _gapTime = 0;
+        var _scrollHeight = 0;
+        var _speed = 0;
+
+        this.init = function (){
+            _scrollId = MM.$(this.scrollId);
+            _scrollCont = MM.getElem('ul', _scrollId )[0];
+            _column = MM.getElem('li', _scrollCont);
+            _gapTime = this.gapTime;
+            _scrollHeight = this.scrollHeight;
+            _speed = this.speed;
+
+            _scrollCont.innerHTML += _scrollCont.innerHTML;
+            _scrollId.scrollTop = _scrollHeight * (_column.length / 2 - 1);
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                _scrollId.scrollTop--;
+                if(_scrollId.scrollTop % _scrollHeight == 0){
+                    clearInterval(_timer);
+                    setTimeout(_start, _gapTime * 1000);
+                }
+                if(_scrollId.scrollTop == 0){
+                    _scrollId.scrollTop = _scrollHeight * _column.length / 2;
+                }
+            }
+            var _start = function(){
+                _timer = setInterval(_move, _speed);
+            };
+            setTimeout(_start, _gapTime * 1000);
+            MM.bind(_scrollId, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scrollId, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //使用
+    var gapDown = new gapScrollDown();
+    gapDown.scrollId = 'demoB';
+    gapDown.scrollHeight = 30;
+    gapDown.gapTime = 1;
+    gapDown.speed = 10;
+    gapDown.init();
+
+    var gapDown2 = new gapScrollDown();
+    gapDown2.scrollId = 'demoBB';
+    gapDown2.scrollHeight = 30;
+    gapDown2.gapTime = 2;
+    gapDown2.speed = 20;
+    gapDown2.init();
+</script>
+
+<br/><br/>
+
+<!--  横向  -->
+<div class="scrollArea" id="demoC">
+    <ul class="list">
+        <li style="background-color:#c00;">1 ←</li>
+        <li style="background-color:#13e500;">2 ←</li>
+        <li style="background-color:#1771ff;">3 ←</li>
+        <li style="background-color:#e59005;">4 ←</li>
+        <li style="background-color:#e500a3;">5 ←</li>
+    </ul>
+</div>
+
+<div class="scrollArea" id="demoCC">
+    <ul class="list">
+        <li style="background-color:#c00;">1 ←</li>
+        <li style="background-color:#13e500;">2 ←</li>
+        <li style="background-color:#1771ff;">3 ←</li>
+        <li style="background-color:#e59005;">4 ←</li>
+        <li style="background-color:#e500a3;">5 ←</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向左滚动
+     * @param ScrollId 滚动区域id值
+     * @param Width 滚动宽度
+     * @param GapTime 滚动间隙时间
+     * @param Speed 滚动速度
+     */
+    function gapScrollLeft(ScrollId, Width, GapTime, Speed){
+        this.scrollId = ScrollId;
+        this.scrollWidth = Width;
+        this.gapTime = GapTime || 2000;
+        this.speed = Speed || 20;
+
+        var _scrollId = null;
+        var _scrollCont = null;
+        var _column = null;
+        var _timer = null;
+        var _pause = false;
+        var _gapTime = 0;
+        var _scrollWidth = 0;
+        var _speed = 0;
+        this.init = function (){
+            _scrollId = MM.$(this.scrollId);
+            _scrollCont = MM.getElem('ul', _scrollId )[0];
+            _column = MM.getElem('li', _scrollCont);
+            _gapTime = this.gapTime;
+            _scrollWidth = this.scrollWidth;
+            _speed = this.speed;
+            _scrollCont.innerHTML += _scrollCont.innerHTML;
+            _scrollCont.style.width = _scrollWidth * _column.length + 'px';
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                _scrollId.scrollLeft++;
+
+                if(_scrollId.scrollLeft % _scrollWidth == 0){
+                    clearInterval(_timer);
+                    setTimeout(_start, _gapTime * 1000);
+                }
+                if(_scrollId.scrollLeft == _scrollWidth * _column.length / 2){
+                    _scrollId.scrollLeft = 0;
+                }
+            }
+            var _start = function(){
+                _timer = setInterval(_move, _speed);
+            };
+            setTimeout(_start, _gapTime * 1000);
+            MM.bind(_scrollId, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scrollId, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //使用
+    var gapLeft = new gapScrollLeft();
+    gapLeft.scrollId = 'demoC';
+    gapLeft.scrollWidth = 300;
+    gapLeft.gapTime = 1;
+    gapLeft.speed = 10;
+    gapLeft.init();
+
+    var gapLeft2 = new gapScrollLeft();
+    gapLeft2.scrollId = 'demoCC';
+    gapLeft2.scrollWidth = 300;
+    gapLeft2.gapTime = 2;
+    gapLeft2.speed = 20;
+    gapLeft2.init();
+</script>
+
+<br/><br/>
+
+<div class="scrollArea" id="demoD">
+    <ul class="list">
+        <li style="background-color:#e500a3;">5 →</li>
+        <li style="background-color:#e59005;">4 →</li>
+        <li style="background-color:#1771ff;">3 →</li>
+        <li style="background-color:#13e500;">2 →</li>
+        <li style="background-color:#c00;">1 →</li>
+    </ul>
+</div>
+
+<div class="scrollArea" id="demoDD">
+    <ul class="list">
+        <li style="background-color:#e500a3;">5 →</li>
+        <li style="background-color:#e59005;">4 →</li>
+        <li style="background-color:#1771ff;">3 →</li>
+        <li style="background-color:#13e500;">2 →</li>
+        <li style="background-color:#c00;">1 →</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /**
+     * 向右滚动
+     * @param ScrollId 滚动区域id值
+     * @param Width 滚动宽度
+     * @param GapTime 滚动间隙时间
+     * @param Speed 滚动速度
+     */
+    function gapScrollRight(ScrollId, Width, GapTime, Speed){
+        this.scrollId = ScrollId;
+        this.scrollWidth = Width;
+        this.gapTime = GapTime || 2000;
+        this.speed = Speed || 20;
+
+        var _scrollId = null;
+        var _scrollCont = null;
+        var _column = null;
+        var _timer = null;
+        var _pause = false;
+        var _gapTime = 0;
+        var _scrollWidth = 0;
+        var _speed = 0;
+        this.init = function (){
+            _scrollId = MM.$(this.scrollId);
+            _scrollCont = MM.getElem('ul', _scrollId )[0];
+            _column = MM.getElem('li', _scrollCont);
+            _gapTime = this.gapTime;
+            _scrollWidth = this.scrollWidth;
+            _speed = this.speed;
+            _scrollCont.innerHTML += _scrollCont.innerHTML;
+            _scrollCont.style.width = _scrollWidth * _column.length + 'px';
+            _scrollId.scrollLeft = _scrollWidth * (_column.length - 1);
+            function _move(){
+                if(_pause){
+                    return;
+                }
+                _scrollId.scrollLeft--;
+                if(_scrollId.scrollLeft % _scrollWidth == 0){
+                    clearInterval(_timer);
+                    setTimeout(_start, _gapTime * 1000);
+                }
+                if(_scrollId.scrollLeft == 0){
+                    _scrollId.scrollLeft = _scrollWidth * _column.length / 2;
+                }
+            }
+            var _start = function(){
+                _timer = setInterval(_move, _speed);
+            };
+            setTimeout(_start, _gapTime * 1000);
+            MM.bind(_scrollId, 'mouseover', function(){
+                _pause = true;
+            });
+            MM.bind(_scrollId, 'mouseout', function(){
+                _pause = false;
+            });
+        };
+    }
+
+    //使用
+    var gapRight = new gapScrollRight();
+    gapRight.scrollId = 'demoD';
+    gapRight.scrollWidth = 300;
+    gapRight.gapTime = 1;
+    gapRight.speed = 10;
+    gapRight.init();
+
+    var gapRight2 = new gapScrollRight();
+    gapRight2.scrollId = 'demoDD';
+    gapRight2.scrollWidth = 300;
+    gapRight2.gapTime = 2;
+    gapRight2.speed = 20;
+    gapRight2.init();
+</script>
+</body>
+</html>

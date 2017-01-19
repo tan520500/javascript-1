@@ -1,0 +1,61 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<style type="text/css">
+    #box{width:55px;height:55px;margin:0 auto;background:url("./images/loading.gif") no-repeat;}
+</style>
+<h1>图片加载完成后显示链接地址</h1>
+<div id="box"></div>
+<script type="text/javascript">
+    function preloadimages(arr) {
+        var imagesArr = [],
+            imagesLoaded = 0,
+            arr = (typeof arr != "object") ? [arr] : arr;
+
+        for(var i = 0, leg = arr.length; i < leg; i++) {
+            imagesArr[i] = new Image();
+            imagesArr[i].src = arr[i];
+            imagesArr[i].onload = function() {
+                imageLoadPost();
+            };
+            imagesArr[i].onerror = function() {
+                imageLoadPost();
+            };
+        }
+        function imageLoadPost() {
+            imagesLoaded++;
+            if(imagesLoaded == arr.length) {
+                postAction(imagesArr) //加载完成用我们调用postaction函数并将newimages数组做为参数传递进去
+            }
+        }
+        function postAction(arr) {
+            //加载完成执行
+            var box = document.getElementById('box');
+            for(var i = 0, leg = arr.length; i < leg; i++) {
+                document.write(arr[i].src + '<br />');
+            }
+        }
+        return { //此处返回一个空白对象的done方法
+            done: function(callBack) {
+                postAction = callBack || postAction;
+            }
+        }
+    }
+
+    var linkPicArr = [
+        'http://files.vivo.com.cn/static/www/vivo/xplay5/gallery/xplay5-b-1.jpg',
+        'http://files.vivo.com.cn/static/www/vivo/xplay5/gallery/xplay5-b-2.jpg',
+        'http://files.vivo.com.cn/static/www/vivo/xplay5/gallery/xplay5-b-3.jpg',
+        'http://files.vivo.com.cn/static/www/vivo/xplay5/gallery/xplay5-b-4.jpg',
+        'http://files.vivo.com.cn/static/www/vivo/xplay5/gallery/xplay5-b-5.jpg',
+        'http://files.vivo.com.cn/static/www/vivo/xplay5/gallery/xplay5-b-6.jpg',
+        'http://files.vivo.com.cn/static/www/vivo/xplay5/gallery/xplay5-b-7.jpg'
+    ];
+    preloadimages(linkPicArr).done();
+</script>
+</body>
+</html>

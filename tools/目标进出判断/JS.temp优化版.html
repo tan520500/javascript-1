@@ -1,0 +1,168 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        *{margin:0;padding:0;border:0;}
+        .wrapper{width:400px;height:400px;background:#c00;position:absolute;left:50%;margin:0 0 0 -200px;}
+        #wrapA{top:800px;}
+    </style>
+</head>
+<body style="height:8000px;">
+
+<div id="wrapA" class="wrapper"></div>
+
+
+<script type="text/javascript">
+    /**
+     * 鼠标滑轮滚动事件绑定
+     * @param  TargetElem (element)字符串
+     * @param  Type 滑轮事件(mousewheel)
+     * @param  Fn 事件执行函数
+     * @example  MM.wheelBind(elem, 'mousewheel', function(e) {
+     *     console.log(e.delta);
+     * });
+     */
+    var wheelBind = (function() {
+        var eventCompat = function(e) {
+            //兼容处理
+            e = e || window.event;
+            var type = e.type;
+            if(type === 'DOMMouseScroll' || type === 'mousewheel') {
+                e.delta = (e.wheelDelta) ? e.wheelDelta / 120 : -(e.detail) / 3;
+            }
+            e.target = e.target || e.srcElement;
+            //如果 Elem === window 注释掉禁止默认行为
+            //e.preventDefault ? e.preventDefault() : e.returnValue = !!0;
+            return e;
+        };
+        if(window.addEventListener) {
+            return function(Elem, Type, Fn) {
+                if(Type === "mousewheel" && document.mozHidden !== undefined) { //Firefox
+                    Type = "DOMMouseScroll";
+                }
+                Elem.addEventListener(Type, function(e) {
+                    Fn.call(this, eventCompat(e));
+                }, false);
+            }
+        } else if(window.attachEvent) {
+            return function(Elem, Type, Fn) {
+                Elem.attachEvent("on" + Type, function(e) {
+                    Fn.call(this, eventCompat(e));
+                });
+            }
+        }
+        return function() {};
+    }());
+    /**
+     * 容器显示位置判断
+     * @param Elem 目标标签
+     * @param InFactor 容器相对于视口的显示量，取值区间(1 >= h >= 0)
+     * @returns {boolean}
+     */
+    function inViewport(Elem, InFactor) {
+        var elemHeigth = Elem.offsetHeight, //标签高度
+            scrolledTop = getScrollTop(), //滚动条位置
+            viewed = scrolledTop + getViewportHeight(), //滑动条 + 窗口可见高度
+            elemTop = getDocOffset(Elem).top; //标签距离顶端距离
+
+        var inH = 0;
+        if(InFactor > 0) {
+            inH = InFactor;
+        } else if(InFactor === 0) {
+            inH = 0;
+        }
+        return {
+            isDownIn: (elemTop + elemHeigth * inH) <= viewed, //容器从下面移入
+            isDownOut: (elemTop + getViewportHeight() + elemHeigth * inH) <= viewed, //容器从上面移出
+            isUpIn: (elemTop + getViewportHeight() + elemHeigth * inH) >= viewed, //容器从上面移入
+            isUpOut: (elemTop + elemHeigth * inH) >= viewed //容器从下面移出
+        };
+    }
+    function getScrollTop() {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+    }
+    function getViewportHeight() {
+        return document.documentElement.clientHeight || document.body.clientHeight;
+    }
+    function getDocOffset(TargetElem) {
+        var rect = TargetElem.getBoundingClientRect(),
+            body = document.body,
+            docElem = document.documentElement,
+            //for ie
+            clientTop = docElem.clientTop || body.clientTop || 0,
+            clientLeft = docElem.clientLeft || body.clientLeft || 0,
+            zoom = 1;
+        if(body.getBoundingClientRect) {
+            var bound = body.getBoundingClientRect();
+            zoom = (bound.right - bound.left) / body.clientWidth;
+        }
+        if(zoom > 1) {
+            clientTop = 0;
+            clientLeft = 0;
+        }
+        var top = rect.top / zoom + (window.pageYOffset || docElem && docElem.scrollTop / zoom || body.scrollTop / zoom) - clientTop,
+            left = rect.left / zoom + (window.pageXOffset || docElem && docElem.scrollLeft / zoom || body.scrollLeft / zoom) - clientLeft;
+        return {
+            top: parseInt(top, 10),
+            left: parseInt(left, 10)
+        };
+    }
+</script>
+<script type="text/javascript">
+    var wrapA = document.getElementById('wrapA');
+    var flagDownIn = true;
+    var flagDownOut = true;
+    var flagUpIn = false;
+    var flagUpOut = false;
+
+    var excessDownIn = true;
+    var excessUpIn = false;
+
+    wheelBind(window, 'mousewheel', function(e) {
+        var isDownIn = inViewport(wrapA, 0).isDownIn;
+        var isDownOut = inViewport(wrapA, 1).isDownOut;
+        var isUpIn = inViewport(wrapA, 1).isUpIn;
+        var isUpOut = inViewport(wrapA, 0).isUpOut;
+
+        var isDownInExcess = inViewport(wrapA, 1.5).isDownIn;
+        var isUpInExcess = inViewport(wrapA, 1.5).isUpOut;
+
+        if(e.delta < 0){
+            if(isDownIn && flagDownIn) {
+                console.log('isDownIn');
+                flagDownIn = false;
+            }
+            if(isDownOut && flagDownOut) {
+                console.log('isDownOut');
+                flagDownOut = false;
+                flagUpIn = true;
+                flagUpOut = true;
+                excessUpIn = true;
+            }
+            //超出
+            if(excessDownIn && isDownInExcess) {
+                console.log('isDownInExcess');
+                excessDownIn = false;
+            }
+        }
+        if(e.delta > 0){
+            if(isUpIn && flagUpIn){
+                console.log('isUpIn');
+                flagUpIn = false;
+            }
+            if(isUpOut && flagUpOut) {
+                console.log('isUpOut');
+                flagUpOut = false;
+            }
+            //超出
+            if(excessUpIn && isUpInExcess) {
+                console.log('isUpInExcess');
+                excessUpIn = false;
+            }
+        }
+    });
+</script>
+</body>
+</html>

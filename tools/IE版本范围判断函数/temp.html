@@ -1,0 +1,26 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1>IE浏览器版本范围判断</h1>
+<script type="text/javascript">
+    //version:10、9、8、7
+    function ieRange(number){
+        var _ua = navigator.userAgent.toLowerCase(),
+                isContain = /msie/.test(_ua);
+        if(isContain){
+            var _version = _ua.match(/msie ([\d.]+)/)[1];
+            if(parseInt(_version) < number){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    console.log(ieRange('10'));
+</script>
+</body>
+</html>

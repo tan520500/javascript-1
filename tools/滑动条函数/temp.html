@@ -1,0 +1,160 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin:0;padding:0;border:0;}
+        html,body{height:100%;}
+        .test-box{width:700px;=margin:50px auto;=}
+        .slider-track{width:700px;height:4px;background:#ccc;position:relative;}
+        .slider-track .slider-handle{position:absolute;top:-8px;left:0px;width:20px;height:20px;border-radius:50%;background:#ff8409;}
+        .slider-track .mousedown{background:#ff430d;}
+    </style>
+</head>
+<body>
+
+<div class="test-box">
+    <div id="slider-track" class="slider-track">
+        <div id="slider-handle" class="slider-handle"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    /**
+     * 滑动器
+     * @param SliderTrack 滑动器轨道ID
+     * @param SliderHandle 滑动器手柄ID
+     * @constructor
+     */
+    function Slider(SliderTrack, SliderHandle) {
+        this.sliderTrack = SliderTrack;
+        this.sliderHandle = SliderHandle;
+
+        var _self = this,
+                _target = null, //mousedown事件目标
+                _targetClass = '', //mousedown事件目标className
+                _getCursorLeft = 0, //记录滑动手柄的left值
+                _sliderTrackLeft = 0, //滑动器left值
+                _sliderTrackWidth  = 0, //滑动器宽度
+                _sliderHandleWidth = 0, //滑动手柄宽度
+                _x = 0; //存储bar的left值
+
+        //获取ID
+        this.getId = function(Id) {
+            return typeof Id == 'string' ? window.document.getElementById(Id) : Id;
+        };
+        this.hasClass = function(TargetElem, ClassName) {
+            return new RegExp('(^|\\s)' + ClassName + '(\\s|$)').test(TargetElem.className);
+        };
+        //事件绑定
+        this.bind = function(TargetElem, Type, Fn) {
+            if(TargetElem.addEventListener) {
+                TargetElem.addEventListener(Type, Fn, false);
+            } else {
+                TargetElem.attachEvent('on' + Type, Fn);
+            }
+        };
+        //事件解绑
+        this.unbind = function(TargetElem, Type, Fn) {
+            if(window.addEventListener){
+                TargetElem.removeEventListener(Type, Fn, false);
+            }else{
+                TargetElem.detachEvent('on' + Type, Fn);
+            }
+        };
+        //获取事件目标
+        this.target = function(E) {
+            E = E || window.event;
+            var target = E.target || E.srcElement;
+            return target;
+        };
+        //计算target的left值
+        this.offsetLeft = function(BarTrack) {
+            var left = 0;
+            if (BarTrack.offsetParent) {
+                while(BarTrack.offsetParent){
+                    left += BarTrack.offsetLeft;
+                    BarTrack = BarTrack.offsetParent;
+                }
+            }
+            return left;
+        };
+        //事件目标交互
+        this.trackEvent = function(e) {
+            e = e || window.event;
+            _target = _self.target(e);
+            _targetClass = _target.className;
+            _target.className = _targetClass + ' ' + 'mousedown'; //滑动手柄mousedown时添加className
+            _self.sliderHandleEvent(e);
+
+            //mousedown 防止内容被选中
+            document.onselectstart = function () {
+                return false;
+            };
+            //FF不支持，使用-moz-user-select:none;
+            document.getElementsByTagName('body')[0].style.MozUserSelect = 'none';
+        };
+        //计算sliderBtn的left值
+        this.sliderHandleEvent = function(e) {
+            var cursorLeft = e.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft);
+            _getCursorLeft = cursorLeft - _self.offsetLeft(_self._sliderHandle);
+            _self.bind(document, "mousemove", _self.sliderTrackDrag);
+        };
+        //拖动sliderBtn
+        this.sliderTrackDrag = function(e){
+            e = e || window.event;
+            var cursorMoveLeft = e.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft) - _sliderTrackLeft;
+            var sty = _self._sliderHandle.style;
+
+            if (cursorMoveLeft >= _sliderTrackWidth - _sliderHandleWidth + _getCursorLeft){
+                sty.left = _sliderTrackWidth - _sliderHandleWidth + "px";
+            }else if (cursorMoveLeft <= _getCursorLeft){
+                sty.left = "0px";
+            }else{
+                sty.left = cursorMoveLeft - _getCursorLeft + "px";
+            }
+            _x = parseInt(sty.left);
+            _self.moveContent();
+        };
+        this.moveContent = function () {
+            //在此继续编写~
+            //_self._sliderTrack 滑动器ID
+            //_self._sliderHandle 滑动手柄ID
+            //_sliderTrackWidth 滑动器宽度
+            //_sliderHandleWidth 滑动手柄宽度
+            //_x 保存bar的left值
+        };
+        //停止滑动
+        this.stopScroll = function(){
+            _self.unbind(document, "mousemove", _self.sliderTrackDrag);
+            _self.unbind(document, 'mouseup', _self.trackEvent);
+            //清除className
+            if(_target) {
+                _target.className = _targetClass;
+            }
+        };
+        //入口
+        this.init = function() {
+            _self._sliderTrack = _self.getId(_self.sliderTrack); //获取滑动器ID
+            _self._sliderHandle = _self.getId(_self.sliderHandle); //获取滑动手柄ID
+
+            _sliderTrackLeft = _self.offsetLeft(_self._sliderTrack); //获取滑动器距离最左端的left值
+            _sliderTrackWidth  = _self._sliderTrack.offsetWidth; //获取滑动器宽度
+            _sliderHandleWidth = _self._sliderHandle.offsetWidth; //获取手柄宽度
+
+            //手柄事件绑定
+            _self.bind(_self._sliderHandle, 'mousedown', _self.trackEvent);
+            //解除绑定
+            _self.bind(document, 'mouseup', _self.stopScroll);
+        };
+    }
+</script>
+<script type="text/javascript">
+    var sliderBar = new Slider();
+    sliderBar.sliderTrack = 'slider-track';
+    sliderBar.sliderHandle = 'slider-handle';
+    sliderBar.init();
+</script>
+</body>
+</html>

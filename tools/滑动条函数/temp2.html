@@ -1,0 +1,127 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin:0;padding:0;border:0;}
+        html,body{height:100%;}
+        .test-box{width:700px;margin:50px auto;}
+        .slider-track{width:700px;height:4px;background:#ccc;position:relative;}
+        .slider-track .slider-handle{position:absolute;top:-8px;left:0px;width:20px;height:20px;border-radius:50%;background:#ff8409;}
+        .slider-track .mousedown{background:#ff430d;}
+    </style>
+</head>
+<body>
+
+<div class="test-box">
+    <div id="slider-track" class="slider-track">
+        <div id="slider-handle" class="slider-handle"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function SliderHand(SliderTrack, SliderHandle) {
+        this.sliderTrack = SliderTrack;
+        this.sliderHandle = SliderHandle;
+
+        var _self = this,
+                saveHandStart = 0, //mousedown起点值
+                _x = 0; //存储bar的left值
+        //获取ID
+        this.getId = function (Id) {
+            return typeof Id == 'string' ? window.document.getElementById(Id) : Id;
+        };
+        this.getStyle = function(TargetElem, Attr) {
+            return window.getComputedStyle ? window.getComputedStyle(TargetElem, null).getPropertyValue(Attr) : TargetElem.currentStyle[Attr];
+        };
+        //事件绑定
+        this.bind = function (TargetElem, Type, Fn) {
+            if (TargetElem.addEventListener) {
+                TargetElem.addEventListener(Type, Fn, false);
+            } else {
+                TargetElem.attachEvent('on' + Type, Fn);
+            }
+        };
+        //事件解绑
+        this.unbind = function (TargetElem, Type, Fn) {
+            if (window.addEventListener) {
+                TargetElem.removeEventListener(Type, Fn, false);
+            } else {
+                TargetElem.detachEvent('on' + Type, Fn);
+            }
+        };
+        //计算target的left值
+        this.offsetLeft = function (BarTrack) {
+            var left = 0;
+            if (BarTrack.offsetParent) {
+                while (BarTrack.offsetParent) {
+                    left += BarTrack.offsetLeft;
+                    BarTrack = BarTrack.offsetParent;
+                }
+            }
+            return left;
+        };
+        //拖拽起始
+        this.startScroll = function (e) {
+            e = e || window.event;
+            var cursorLeft = e.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft);
+            saveHandStart = cursorLeft; //保存mousedown点到左侧距离
+            _self.saveHandLeft = parseInt(_self.getStyle(_self._sliderHandle, 'left'));
+            _self.bind(document, 'mousemove', _self.sliderTrackDrag);
+            //mousedown 防止内容被选中
+            document.onselectstart = function () {
+                return false;
+            };
+            //FF不支持，使用-moz-user-select:none;
+            document.getElementsByTagName('body')[0].style.MozUserSelect = 'none';
+        };
+        //拖拽
+        this.sliderTrackDrag = function (e) {
+            e = e || window.event;
+            var cursorMoveLeft = e.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft) - saveHandStart;
+
+            var sty = _self._sliderHandle.style;
+            if (cursorMoveLeft + _self.saveHandLeft >= _sliderTrackWidth - _sliderHandleWidth) {
+                sty.left = _sliderTrackWidth - _sliderHandleWidth + "px";
+            } else if (cursorMoveLeft + _self.saveHandLeft <= 0) {
+                sty.left = "0px";
+            } else {
+                sty.left = cursorMoveLeft + _self.saveHandLeft + "px";
+            }
+            _x = parseInt(sty.left);
+            _self.moveContent();
+        };
+        this.moveContent = function () {
+            //在此继续编写~
+            //_self._sliderTrack 滑动器ID
+            //_self._sliderHandle 滑动手柄ID
+            //_sliderTrackWidth 滑动器宽度
+            //_sliderHandleWidth 滑动手柄宽度
+            //_x 保存bar的left值
+            //_self.saveHandLeft 保存上一次bar的最终left值
+        };
+        //mouseup解绑所有事件
+        this.stopScroll = function () {
+            _self.unbind(document, "mousemove", _self.sliderTrackDrag);
+            _self.unbind(document, 'mouseup', _self.startScroll);
+        };
+        //入口
+        this.init = function () {
+            _self._sliderTrack = _self.getId(_self.sliderTrack); //获取滑动器ID
+            _self._sliderHandle = _self.getId(_self.sliderHandle); //获取滑动手柄ID
+            _sliderTrackWidth = _self._sliderTrack.offsetWidth; //获取滑动器宽度
+            _sliderHandleWidth = _self._sliderHandle.offsetWidth; //获取手柄宽度
+            _self.bind(document, 'mousedown', _self.startScroll);
+            _self.bind(document, 'mouseup', _self.stopScroll);
+        };
+    }
+</script>
+<script type="text/javascript">
+    var sliderHand = new SliderHand();
+    sliderHand.sliderTrack = 'slider-track';
+    sliderHand.sliderHandle = 'slider-handle';
+    sliderHand.init();
+</script>
+</body>
+</html>

@@ -58,7 +58,7 @@
                 return false;
             };
             //FF不支持，使用-moz-user-select:none;
-            document.getElementsByTagName('body')[0].style.MozUserSelect = 'none';
+            document.body.style.MozUserSelect = 'none';
         };
         //计算sliderBtn的top值
         this.sliderHandleEvent = function(e) {
@@ -107,8 +107,6 @@
             MM.bind(document, 'mouseup', _self.stopScroll);
         };
     }
-
-
     //使用
     var blear = new BlearSlider();
     blear.sliderTrack = 'slider-track';

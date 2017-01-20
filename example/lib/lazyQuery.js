@@ -24,7 +24,7 @@
      * @param FindRang  查询范围
      * @return {array} or {element}
      */
-        //暴露唯一全局变量 "MM"
+    //暴露唯一全局变量 "MM"
     var MM = window.MM = function(Obj, FindRange){
             if(arguments.length === 0){
                 return MM;

@@ -1,0 +1,117 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .area{width:300px;height:280px;margin:20px auto;border:1px solid #ccc;font-size:12px;}
+        .area a{text-decoration:none;color:#fff;}
+        .area .up,
+        .area .down{display:block;width:100%;height:30px;line-height:30px;background:#2d61cc;text-align:center;}
+        .area .disable{background-color:#ccc;cursor:default;}
+        .box{width:280px;height:220px;line-height:22px;padding:0 10px;overflow:hidden;overflow-y:auto;}
+        .box p{margin:0;}
+        #box2{overflow-y:hidden;}
+    </style>
+</head>
+<body>
+
+<div class="area">
+    <a id="upBtn" class="up" href="javascript:;">向上</a>
+    <div id="box" class="box">
+        <p>【开始】报告显示，2014年应届生平均起薪为2443元/月，相当于半部苹果手机，但也比2013年增加了324元，其中一线城市薪资水平领先，像北京为3019元。而酒店管理类专业虽然就业率很低，但是平均起薪却最高，为2900元；物流类专业在就业率和薪酬水平方面均名列前茅，成为很有前景的专业，它的平均起薪为2875元；电气自动化专业排名第三，平均起薪为2842元。而排名最后的三类专业分别为汽车维修类、旅游管理类以及环境科学类，他们的平均起薪在2000元左右。
+            而令女生们气馁的是，男生的平均起薪要高于女生。长期以来的“重男轻女”现象依然存在，此次调查显示，应届毕业生中男生的平均起薪为2630元，要比女生高出389元，许多企业在同等条件下更愿意录用男生。
+            在就业意愿方面，调查的结果给了人们不小的惊讶，锐气满满的90后毫不掩饰自己对体制的向往，显示出极其的实用主义，49%的人表示毕业之后想去体制内工作，其中国有企业最受欢迎，当前热门的国家机关公务员虽然工作稳定，但并不受90后应届生追捧。然而残酷的就业现实并不能满足所有应届生的工作意愿，2014年的就业现实是，最终只有16.7%的应届生去了体制内工作，而有78.9%的人由于种种原因最终选择了体制外的工作。
+            90后更为现实的表现是，其期望月薪与实际月薪惊人的相似，2014年期望的平均起薪为2606元，较2013年略有提升。与实际的差距仅为163元，较去年的391元的差距又“精准”了不少。【结束】</p>
+    </div>
+    <a id="downBtn" class="down disable" href="javascript:;">向下</a>
+</div>
+
+<div class="area">
+    <a id="upBtn2" class="up" href="javascript:;">向上</a>
+    <div id="box2" class="box">
+        <p>【开始】报告显示，2014年应届生平均起薪为2443元/月，相当于半部苹果手机，但也比2013年增加了324元，其中一线城市薪资水平领先，像北京为3019元。而酒店管理类专业虽然就业率很低，但是平均起薪却最高，为2900元；物流类专业在就业率和薪酬水平方面均名列前茅，成为很有前景的专业，它的平均起薪为2875元；电气自动化专业排名第三，平均起薪为2842元。而排名最后的三类专业分别为汽车维修类、旅游管理类以及环境科学类，他们的平均起薪在2000元左右。
+            而令女生们气馁的是，男生的平均起薪要高于女生。长期以来的“重男轻女”现象依然存在，此次调查显示，应届毕业生中男生的平均起薪为2630元，要比女生高出389元，许多企业在同等条件下更愿意录用男生。
+            在就业意愿方面，调查的结果给了人们不小的惊讶，锐气满满的90后毫不掩饰自己对体制的向往，显示出极其的实用主义，49%的人表示毕业之后想去体制内工作，其中国有企业最受欢迎，当前热门的国家机关公务员虽然工作稳定，但并不受90后应届生追捧。然而残酷的就业现实并不能满足所有应届生的工作意愿，2014年的就业现实是，最终只有16.7%的应届生去了体制内工作，而有78.9%的人由于种种原因最终选择了体制外的工作。
+            90后更为现实的表现是，其期望月薪与实际月薪惊人的相似，2014年期望的平均起薪为2606元，较2013年略有提升。与实际的差距仅为163元，较去年的391元的差距又“精准”了不少。【结束】</p>
+    </div>
+    <a id="downBtn2" class="down disable" href="javascript:;">向下</a>
+</div>
+
+<script type="text/javascript">
+    function autoScroll(ScrollId, UpBtn, DownBtn, Speed){
+        this.scrollId = ScrollId;
+        this.upBtn = UpBtn;
+        this.downBtn = DownBtn;
+        this.speed = Speed || 20;
+
+        var _self = this;
+        init = function () {
+            var scrollCont = MM.$(_self.scrollId);
+            var scrollText = MM.getElem('p', scrollCont)[0];
+            var upBtn = MM.$(_self.upBtn);
+            var downBtn = MM.$(_self.downBtn);
+            var timer = null;
+
+            var scrollBar = function () {
+                if(scrollCont.scrollTop == 0){
+                    MM.addClass(downBtn, 'disable');
+                    MM.removeClass(upBtn, 'disable');
+                }else{
+                    MM.removeClass(upBtn, 'disable');
+                    MM.removeClass(downBtn, 'disable');
+                }
+                if(scrollCont.scrollTop == scrollText.offsetHeight - scrollCont.offsetHeight){
+                    MM.addClass(upBtn, 'disable');
+                    MM.removeClass(downBtn, 'disable');
+                }
+            };
+            //拖动滑动条
+            MM.bind(scrollCont, 'scroll', scrollBar);
+            var rollMove = function (Dir) {
+                if(Dir == true){
+                    scrollCont.scrollTop++;
+                    if(scrollCont.scrollTop == scrollText.offsetHeight - scrollCont.offsetHeight){
+                        clearInterval(timer);
+                        MM.addClass(upBtn, 'disable');
+                    }
+                    MM.removeClass(downBtn, 'disable');
+                }else{
+                    scrollCont.scrollTop--;
+                    if(scrollCont.scrollTop == 0){
+                        clearInterval(timer);
+                        MM.addClass(downBtn, 'disable');
+                    }
+                    MM.removeClass(upBtn, 'disable');
+                }
+            };
+            var start = function(Dir){
+                timer = setInterval(function(){
+                    rollMove(Dir);
+                }, _self.speed);
+            };
+            MM.bind(upBtn, 'mouseover', function(){
+                clearInterval(timer);
+                start(true);
+            });
+            MM.bind(downBtn, 'mouseover', function(){
+                clearInterval(timer);
+                start(false);
+            });
+            MM.bind(upBtn, 'mouseout', function(){
+                clearInterval(timer);
+            });
+            MM.bind(downBtn, 'mouseout', function(){
+                clearInterval(timer);
+            });
+        };
+        init();
+    }
+    //使用
+    new autoScroll('box', 'upBtn', 'downBtn');
+    new autoScroll('box2', 'upBtn2', 'downBtn2');
+</script>
+</body>
+</html>

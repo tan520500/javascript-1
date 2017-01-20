@@ -6,18 +6,8 @@
     <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
     <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
     <style type="text/css">
-        #countTime, .time{
-            height:40px;
-            margin:20px auto;
-            line-height:40px;
-            border:10px solid #ccc;
-            font-size:20px;
-            text-align:center;
-            color:#c00;
-        }
-        #countTime span{
-            color:#000;
-        }
+        #countTime, .time{height:40px;margin:20px auto;line-height:40px;border:10px solid #ccc;font-size:20px;text-align:center;color:#c00;}
+        #countTime span{color:#000;}
     </style>
 </head>
 <body>
@@ -56,7 +46,6 @@
         }
         return Format;
     }
-
     //使用
     var time = formatToStr('yyyy-MM-dd hh:mm:ss:S — Q季度');
     document.getElementById('countTime').innerHTML = time;

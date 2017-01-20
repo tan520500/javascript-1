@@ -1,0 +1,166 @@
+﻿<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        body {font:12px Verdana,Arial; }
+        h1 {font:26px Georgia,Verdana}
+        p {line-height:1.4;margin-top:10px}
+        .wrapper {width:400px; height:200px; margin:40px auto; background:#ccc; border:4px solid #eee; padding:20px}
+        #scrollA,
+        #scrollB{position:relative; width:400px; height:200px; overflow:auto;}
+        #scrollcontentA,
+        #scrollcontentB{position:absolute; width:375px; z-index:200}
+        #scrollbarA,
+        #scrollbarB{float:right; position:relative; display:none; width:15px; height:200px; z-index:100; background:#e6e6e6;}
+        .scroller {position:absolute; top:0; width:15px; cursor:pointer; background-color:#999;}
+        .barClickClass {background-color:#333;}
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div id="scrollA">
+        <div id="scrollcontentA">
+            <h1>TinyScroller</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet mauris at sapien iaculis pulvinar. Morbi ut mi in felis fringilla semper. Cras sapien lorem, sodales mattis, pellentesque eu, luctus ac, ante. Curabitur egestas aliquet erat. Nunc accumsan augue egestas dolor. Pellentesque vitae mi. Suspendisse tincidunt elit vel tortor. Sed eu ligula sit amet mi rhoncus ultricies. Curabitur ut risus at lectus semper eleifend. Pellentesque lectus eros, dapibus in, accumsan sit amet, imperdiet eget, dolor. Curabitur et purus sit amet felis mattis aliquam. Etiam feugiat elementum urna. Vivamus iaculis commodo turpis. Donec suscipit, quam eget mollis sagittis, eros nunc feugiat felis, ut sagittis mauris elit a libero. Etiam sed erat.</p>
+            <p>Nullam vestibulum, justo a gravida vulputate, orci dui cursus tellus, dapibus vulputate nibh sem consectetur libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam placerat, massa eget dignissim tempor, arcu ipsum condimentum elit, nec ullamcorper felis ante ut justo. Maecenas iaculis purus vel risus. Vestibulum convallis interdum elit. Aliquam sed diam. Sed leo. Etiam sed erat. Nullam vestibulum, justo a gravida vulputate, orci dui cursus tellus, dapibus vulputate nibh sem consectetur libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam placerat, massa eget dignissim tempor, arcu ipsum condimentum elit, nec ullamcorper felis ante ut justo. Maecenas iaculis purus vel risus. Vestibulum convallis interdum elit. Aliquam sed diam. Sed leo.</p>
+        </div>
+        <div id="scrollbarA">
+            <div id="scrollerA" class="scroller"></div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div id="scrollB">
+        <div id="scrollcontentB">
+            <h1>TinyScroller</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet mauris at sapien iaculis pulvinar. Morbi ut mi in felis fringilla semper. Cras sapien lorem, sodales mattis, pellentesque eu, luctus ac, ante. Curabitur egestas aliquet erat. Nunc accumsan augue egestas dolor. Pellentesque vitae mi. Suspendisse tincidunt elit vel tortor. Sed eu ligula sit amet mi rhoncus ultricies. Curabitur ut risus at lectus semper eleifend. Pellentesque lectus eros, dapibus in, accumsan sit amet, imperdiet eget, dolor. Curabitur et purus sit amet felis mattis aliquam. Etiam feugiat elementum urna. Vivamus iaculis commodo turpis. Donec suscipit, quam eget mollis sagittis, eros nunc feugiat felis, ut sagittis mauris elit a libero. Etiam sed erat.</p>
+            <p>Nullam vestibulum, justo a gravida vulputate, orci dui cursus tellus, dapibus vulputate nibh sem consectetur libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam placerat, massa eget dignissim tempor, arcu ipsum condimentum elit, nec ullamcorper felis ante ut justo. Maecenas iaculis purus vel risus. Vestibulum convallis interdum elit. Aliquam sed diam. Sed leo. Etiam sed erat. Nullam vestibulum, justo a gravida vulputate, orci dui cursus tellus, dapibus vulputate nibh sem consectetur libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam placerat, massa eget dignissim tempor, arcu ipsum condimentum elit, nec ullamcorper felis ante ut justo. Maecenas iaculis purus vel risus. Vestibulum convallis interdum elit. Aliquam sed diam. Sed leo.</p>
+        </div>
+        <div id="scrollbarB">
+            <div id="scrollerB" class="scroller"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function Slider(ScrollId, ContentId, ScrollBar, Scroller, ScrollerClass){
+        this.scrollIdStr = ScrollId;
+        this.contentIdStr = ContentId;
+        this.scrollBarStr = ScrollBar;
+        this.scrollerStr = Scroller;
+        this.scrollerClassStr = ScrollerClass;
+
+        this.init = function(){
+            var _self = this;
+            _self.scrollId = MM.$(_self.scrollIdStr);
+            _self.contentId = MM.$(_self.contentIdStr);
+            _self.scrollBar = MM.$(_self.scrollBarStr);
+            _self.scroller = MM.$(_self.scrollerStr);
+            _self.scrollerClass = _self.scrollerClassStr;
+
+            _self.scrollBar.style.display = 'block';
+            _self.scrollId.style.overflow = 'hidden';
+            var visibleH = _self.scrollId.offsetHeight,
+                totalH = _self.contentId.offsetHeight;
+            if(totalH < visibleH) {
+                _self.scrollBar.style.display = 'none';
+            }else{
+                _self.scrollId.txtContTop = visibleH - totalH;
+                _self.scrollId.barClassState = totalH / visibleH;
+                _self.scroller.style.height = parseInt(visibleH * (visibleH / totalH)) + 'px';
+                _self.scroller.style.top = _self.scroller.style.left = '0px';
+                MM.bind(_self.scroller, 'mousedown', function(e){
+                    _self.downScrollerTop(e);
+                    //mousedown 防止内容被选中
+                    document.onselectstart = function () {
+                        return false;
+                    };
+                    //FF不支持，使用-moz-user-select:none;
+                    _self.contentId.style.MozUserSelect = 'none';
+                    return false;
+                });
+            }
+            _self.scrollId.barSlideH = _self.scrollBar.offsetHeight - _self.scroller.offsetHeight
+        };
+        //IE返回true,否则返回false
+        this.browserType = (function(){
+            return ((window.navigator.appName.indexOf('Microsoft') && window.navigator.userAgent.indexOf('trident')) != -1) ? true : false;
+        }());
+        this.downScrollerTop = function(e){
+            var _self = this;
+            //mousedown事件 scroller 的Y坐标初始值
+            _self.scrollId.barClientY = _self.cursor.top(e);
+            //mousedown事件 scroller 的top初始值
+            _self.scrollId.barTop = parseInt(_self.scroller.style.top);
+            if (_self.scrollId.moveScrollerTop) {
+                _self.stopScroll();
+            }
+            _self.scrollId.moveScrollerTop = function (e) {
+                _self.moveScrollerTop(e);
+            };
+            _self.scrollId.stopScroll = function () {
+                _self.stopScroll();
+            };
+            MM.bind(document, 'mousemove', _self.scrollId.moveScrollerTop);
+            MM.bind(document, 'mouseup', _self.scrollId.stopScroll);
+            if (_self.scroller.className.indexOf(_self.scrollerClass) === -1) {
+                _self.scroller.className += ' ' + _self.scrollerClass;
+            }
+        };
+        this.moveScrollerTop = function(e){
+            var _self = this;
+            //mousemove事件 scroller的top值
+            var moveTopVal = _self.cursor.top(e) - _self.scrollId.barClientY + _self.scrollId.barTop;
+            if (moveTopVal >= 0 && moveTopVal < _self.scrollId.barSlideH) {
+                _self.scroller.style.top = moveTopVal + 'px';
+                _self.contentId.style.top = parseInt(-moveTopVal * _self.scrollId.barClassState) + 'px'
+            } else if (moveTopVal < 0) {
+                _self.scroller.style.top = 0;
+                _self.contentId.style.top = _self.contentId.style.left = '0px';
+            } else if (moveTopVal > _self.scrollId.barSlideH) {
+                _self.scroller.style.top = _self.scrollId.barSlideH + 'px';
+                _self.contentId.style.top = _self.scrollId.txtContTop + 'px';
+            }
+        };
+        this.stopScroll = function(){
+            var _self = this;
+            if (_self.scroller.className.indexOf(_self.scrollerClass) > -1) {
+                _self.scroller.className = _self.scroller.className.replace(' ' + _self.scrollerClass, '')
+            }
+            MM.unbind(document, 'mousemove', _self.scrollId.moveScrollerTop);
+            MM.unbind(document, 'mouseup', _self.scrollId.stopScroll);
+            _self.scrollId.moveScrollerTop = 0;
+        };
+        this.cursor = function(){
+            var _self = this;
+            return {
+                top: function (e) {
+                    return _self.browserType ? window.event.clientY + (document.documentElement.scrollTop || document.body.scrollTop) : e.clientY + window.scrollY;
+                }
+            }
+        }();
+    };
+    //使用
+    var bar = new Slider();
+    bar.scrollIdStr = 'scrollA';
+    bar.contentIdStr = 'scrollcontentA';
+    bar.scrollBarStr = 'scrollbarA';
+    bar.scrollerStr = 'scrollerA';
+    bar.scrollerClassStr = 'barClickClass';
+    bar.init();
+
+    var bar2 = new Slider();
+    bar2.scrollIdStr = 'scrollB';
+    bar2.contentIdStr = 'scrollcontentB';
+    bar2.scrollBarStr = 'scrollbarB';
+    bar2.scrollerStr = 'scrollerB';
+    bar2.scrollerClassStr = 'barClickClass';
+    bar2.init();
+</script>
+</body>
+</html>

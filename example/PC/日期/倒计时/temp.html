@@ -32,7 +32,7 @@
                 lastHour = parseInt(gapTimes / 1000 / 3600 % 24),
                 lastMin = parseInt(gapTimes / 1000 / 60 % 60),
                 lastSec = parseInt(gapTimes / 1000 % 60);
-            document.getElementById(ShowId).innerHTML = '距离' + endTimes + '还有：' +
+            MM.$(ShowId).innerHTML = '距离' + endTimes + '还有：' +
                 zero(lastDate) + '天' +
                 zero(lastHour) + '小时' +
                 zero(lastMin) + '分' +

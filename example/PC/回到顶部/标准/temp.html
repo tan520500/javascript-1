@@ -28,18 +28,19 @@
 
 <div style="display:none" id="goTop"></div>
 <script type="text/javascript">
-    function goTop(Id){
-        var btn = document.getElementById(Id);
-        window.onscroll = function(){
-            MM.rollTop() > 0 ? btn.style.display = 'block' : btn.style.display = 'none';
-        };
-        btn.onclick = function(){
-            MM.rollTop(0);
-        };
-    }
-
-    //使用
-    goTop('goTop');
+    (function(){
+        function goTop(Id){
+            var btn = MM.$(Id);
+            MM.bind(window, 'scroll', function(){
+                MM.rollTop() > 0 ? btn.style.display = 'block' : btn.style.display = 'none';
+            });
+            MM.bind(btn, 'click', function(){
+                MM.rollTop(0);
+            });
+        }
+        //使用
+        goTop('goTop');
+    }());
 </script>
 </body>
 </html>

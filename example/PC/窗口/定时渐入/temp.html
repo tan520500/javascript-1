@@ -1,0 +1,76 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        * html{background-image:url(about:blank);background-attachment:fixed;}
+        /*    frame    */
+        .floatWindows{width:350px;position:absolute;right:0;bottom:0;overflow:hidden;background:#ccc;height:0;display:none;font-size:12px;}
+        .floatWindows{z-index:9;position:fixed;_position:absolute;
+            _margin-top:expression(document.documentElement.clientHeight-this.style.pixelHeight+document.documentElement.scrollTop);
+        }
+        .closeArea{position:absolute;right:12px;top:12px;color:#FFF;cursor:pointer;}
+        .floatWindowsCon{width:350px;height:300px;background-color:#ccc;}
+        .closeArea{width:12px;height:12px;overflow:hidden;background-color:#c00;}
+    </style>
+</head>
+<body>
+
+<div id="float_block" class="floatWindows" style="height:0;">
+    <div id="close_btn" class="closeArea"></div>
+    <div class="floatWindowsCon">内容区</div>
+</div>
+
+<script type="text/javascript">
+    /**
+     * 广告弹窗
+     * @param WrapperId 窗口id值
+     * @param CloseId 关闭按钮id值
+     * @param Speed 速度
+     */
+    function popups(WrapperId, CloseId, Speed){
+        var floatBlock = document.getElementById (WrapperId),
+            closeBtn = document.getElementById (CloseId),
+            showTimer = null,
+            hideTimer = null;
+
+        var moveHeight = function(DirAttr){
+            var nowHeight = parseInt (floatBlock.style.height);
+            if (DirAttr == 'open') {
+                floatBlock.style.height = (nowHeight + 2) + 'px';
+                if (nowHeight >= 298) {
+                    clearInterval (showTimer);
+                }
+            }
+            if (DirAttr == 'close') {
+                floatBlock.style.height = (nowHeight - 2) + 'px';
+                if (nowHeight <= 2) {
+                    clearInterval (hideTimer);
+                    floatBlock.style.display = 'none';
+                }
+            }
+        }
+        var manageDir = function(){
+            var nowHeight = parseInt(floatBlock.style.height);
+            if (nowHeight == 0) {
+                floatBlock.style.display = 'block';
+                showTimer = setInterval(function () {
+                    moveHeight ('open');
+                }, 10);
+            } else {
+                hideTimer = setInterval(function () {
+                    moveHeight('close');
+                }, 10);
+            }
+        }
+        setTimeout (manageDir, Speed * 1000);
+        closeBtn.onclick = manageDir;
+    }
+    //使用
+    popups('float_block', 'close_btn', 2);
+</script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        body{font-size:12px;font-family:Arial, Helvetica, sans-serif;}
+        .wrapper{width:420px;margin:20px auto;padding-bottom:20px;}
+        .wrapper .container{width:400px;height:200px;background-color:#EEE;position:relative;}
+        .wrapper .container .view-txt{position:absolute;top:10px;left:0;width:400px;height:180px;overflow:hidden;}
+        .wrapper .container .view-txt .total-txt{position:absolute;top:0px;left:0px;}
+        .wrapper .container .view-txt .total-txt p{padding:0 10px;text-indent:2em;line-height:22px;}
+        /* bar-垂直 */
+        .slider-vertical{position:absolute;top:0;right:-10px;}
+        .slider-vertical .Slider-Up{position:absolute;top:0;left:0;width:10px;height:10px;background-color:#ccc;font-size:0px;cursor:pointer;}
+        .slider-vertical .Slider-Track{width:10px;height:160px;position:absolute;top:20px;left:0;background-color:#eee;}
+        .slider-vertical .Slider-Handle{position:absolute;left:0;width:10px;height:30px;background-color:#ccc;cursor:pointer;}
+        .slider-vertical .Slider-Handle-click{background-color:#000;}
+        .slider-vertical .Slider-Down{position:absolute;top:190px;left:0;width:10px;height:10px;background-color:#ccc;font-size:0px;cursor:pointer;}
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="container">
+        <div id="viewCont" class="view-txt">
+            <div id="totalCont" class="total-txt">
+                <p>新华网曼谷５月２４日电 泰国军政府领导人巴育２４日宣布解散国会上议院。此举意味着国会所有权力归于以巴育为首的“全国维持和平秩序委员会”。</p>
+                <p>与此同时，巴育将国家警察总长阿伦、特别案件调查厅厅长塔尼和国防部次长尼帕特调任虚职，并由两位副警察总长和国防部副常务次长分别代理职务。外界普遍认为阿伦、塔尼和尼帕特是原英拉政府的支持者。</p>
+                <p>泰国陆军司令巴育２２日宣布发动军事政变，称军方已从看守政府手中接管权力。当天，军方宣布“暂时中止”宪法并解散看守政府，但上议院及独立机构可继续履行职责。</p>
+                <p>5月22日下午，在军方与各个政治派别商讨破解政治僵局未果后，泰国陆军司令巴育宣布发动军事政变，称军方已从看守政府手中接管权力。当天，军方宣布“暂时中止”宪法并解散看守政府，当日晚22时起全泰范围内实施宵禁。</p>
+                <p>发动政变后，泰国军方开始全面接管国家事务。军方成立的委员会宣布，由陆军司令巴育暂时代理总理职务，同时传召百余名各方政治人士报到，此外包括这些受传召人士在内的155人被限制出境，包括前总理英拉在内的多名政治人士向军方报到后被扣留。</p>
+            </div>
+        </div>
+        <div id="newsSliderVertical" class="slider-vertical">
+            <div class="Slider-Up"></div>
+            <div class="Slider-Down"></div>
+            <div class="Slider-Track">
+                <div class="Slider-Handle"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="container">
+        <div id="viewCont2" class="view-txt">
+            <div id="totalCont2" class="total-txt">
+                <p>新华网曼谷５月２４日电 泰国军政府领导人巴育２４日宣布解散国会上议院。此举意味着国会所有权力归于以巴育为首的“全国维持和平秩序委员会”。</p>
+                <p>与此同时，巴育将国家警察总长阿伦、特别案件调查厅厅长塔尼和国防部次长尼帕特调任虚职，并由两位副警察总长和国防部副常务次长分别代理职务。外界普遍认为阿伦、塔尼和尼帕特是原英拉政府的支持者。</p>
+                <p>泰国陆军司令巴育２２日宣布发动军事政变，称军方已从看守政府手中接管权力。当天，军方宣布“暂时中止”宪法并解散看守政府，但上议院及独立机构可继续履行职责。</p>
+                <p>5月22日下午，在军方与各个政治派别商讨破解政治僵局未果后，泰国陆军司令巴育宣布发动军事政变，称军方已从看守政府手中接管权力。当天，军方宣布“暂时中止”宪法并解散看守政府，当日晚22时起全泰范围内实施宵禁。</p>
+                <p>发动政变后，泰国军方开始全面接管国家事务。军方成立的委员会宣布，由陆军司令巴育暂时代理总理职务，同时传召百余名各方政治人士报到，此外包括这些受传召人士在内的155人被限制出境，包括前总理英拉在内的多名政治人士向军方报到后被扣留。</p>
+            </div>
+        </div>
+        <div id="newsSliderVertical2" class="slider-vertical">
+            <div class="Slider-Up"></div>
+            <div class="Slider-Down"></div>
+            <div class="Slider-Track">
+                <div class="Slider-Handle"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    /**
+     * 自定义滑动器
+     * @param ViewContId 内容可见容器ID
+     * @param TotalContId 内容实际容器ID
+     * @param SliderVerticalId 滑动器容器ID
+     * @param SliderState
+     * @constructor
+     */
+    function Slider (ViewContId, TotalContId, SliderVerticalId, SliderState, SliderBarClick) {
+        this.viewCont = ViewContId;
+        this.totalCont = TotalContId;
+        this.sliderVer = SliderVerticalId;
+        this.sliderState = SliderState;
+        this.sliderBarClick = SliderBarClick;
+
+        var _self = this;
+        var _scrollSpeed = 10; //滑条滚动速度
+        var _scrollTimer = null; //定时器
+        var _eventTarget = null; //目标事件标签
+        var _targetClass = null; //目标事件标签Class
+        var _getCursorTop = 0; //获取点下bar时指针的top值
+        var _barDistX = 0; //点击sliderUp滑条的top
+        var _barDistY = 0; //点击sliderDown滑条的left
+        var _y = 0; //存储#totalCont或bar的top
+        var _auto = this.sliderState ? true : false; //滑动器显示开关
+        var _viewWidth = 0; //显示容器width
+        var _viewHeight = 0; //显示容器height
+        var _totalWidth = 0; //滚动容器width
+        var _totalHeight = 0; //滚动容器height
+        var _sliderTrack = null; //滑道
+        var _sliderHandle = null; //滑条
+        var _trackHeight = 0; //滑道高度
+        var _handleHeight = 0; //滑条高度
+        var _trackTop = 0; //滑条距离body的top值
+        var _ratio = 0; //滚动高度比例
+
+        // 初始化
+        this.init = function () {
+            //ID未设置将报错
+            if (!this.viewCont || !this.totalCont || !this.sliderVer) {
+                throw new Error('未设置viewCont/totalCont/sliderVer参数值！');
+                return;
+            }
+            this.viewCont = document.getElementById(this.viewCont);
+            this.totalCont = document.getElementById(this.totalCont);
+            _viewWidth  = this.viewCont.offsetWidth;
+            _viewHeight = this.viewCont.offsetHeight;
+            _totalWidth = this.totalCont.offsetWidth;
+            _totalHeight = this.totalCont.offsetHeight;
+            this.totalCont.style.top = '0px'; //滚动容器top
+            this.totalCont.style.left = '0px'; //滚动容器left
+
+            this.sliderVer = document.getElementById(this.sliderVer); //纵向滑动器容器
+            _sliderTrack = this.findClass('Slider-Track', this.sliderVer);
+            _sliderHandle = this.findClass('Slider-Handle', _sliderTrack);
+            _trackHeight  = _sliderTrack.offsetHeight;
+            _handleHeight = _sliderHandle.offsetHeight;
+            _trackTop = MM.getDocOffset(_sliderTrack).top;
+            _ratio = (_totalHeight - _viewHeight) / (_trackHeight - _handleHeight);
+
+            //滑动器显示控制
+            if (_totalHeight <= _viewHeight) {
+                if (_auto){
+                    _sliderHandle.style.visibility = "hidden";
+                } else {
+                    this.sliderVer.style.visibility = "hidden";
+                }
+            } else {
+                _sliderHandle.style.visibility = "visible";
+                this.sliderVer.style.visibility  = "visible";
+            }
+            //mousewheel 事件绑定
+            if (this.viewCont.addEventListener) { //Firefox
+                this.viewCont.addEventListener('DOMMouseScroll', _self.wheel, false);
+            }
+            this.viewCont.onmousewheel = _self.wheel; //IE、Chrome、Safair
+
+            // mousedown 事件绑定删除
+            MM.unbind(this.sliderVer, "mousedown", _self.trackEvent);
+            // mousedown 事件绑定
+            MM.bind(this.sliderVer, "mousedown", _self.trackEvent);
+        };
+        //滚轮效果
+        this.wheel = function (e) {
+            e = e || window.event;
+            var dir = 0;
+            if (e.wheelDelta) { //IE、Chrome、Safair
+                dir = -(e.wheelDelta / 120);
+                e.returnValue = false;
+            } else if (e.detail) { //Firefox
+                dir = e.detail / 3;
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            _self.scrollBy(0, dir * 20);
+        };
+        //将内容滚动(bar跟随)计算和滑道(track点击)滚动计算的差别JS提取, 让this.scroll可公用
+        this.scrollBy = function (x, y) {
+            _self.scroll(0, (-_y + y) / _ratio); //将Y值换算为.Slider-Handle的top值
+        };
+        //设置滑动条的top
+        this.scroll = function (x, y) {
+            if (y > _trackHeight - _handleHeight) //防止滑条超出下极值
+                y = _trackHeight - _handleHeight;
+            if (y < 0){ //防止滑条超出上极值
+                y = 0;
+            }
+            _sliderHandle.style.top = Math.round(y) + "px";
+            _y = y; //_y存储.Slider-Handle的top值
+            _self.moveContent();
+        };
+        //换算Y值后传递给scrollTo()
+        this.moveContent = function () {
+            //#totalCont与.Slider-Handle的方向相反,Y值取反
+            var totalContTop = Math.round(-_y * _ratio); //将Y值换算为#totalCont的top值
+            _self.setPos(0, totalContTop);
+        };
+        //设置滚动区域的 top 值
+        this.setPos = function (left, top) {
+            if (left < _viewWidth - _totalWidth){
+                left = _viewWidth - _totalWidth;
+            }
+            if (left > 0) {
+                left = 0;
+            }
+            if (top < _viewHeight - _totalHeight){ //防止#totalCont的top超出极值
+                top = _viewHeight - _totalHeight;
+            }
+            if (top > 0){ //防止#totalCont的top超出极值
+                top = 0;
+            }
+            _y = top; //_y存储#totalCont的top值
+            _self.totalCont.style.top = _y + "px";
+        };
+        // 滑动器 mousedown 执行
+        this.trackEvent = function (e) {
+            e = e || window.event;
+            if (!e.target){
+                e.target = e.srcElement;
+            }
+
+            if (e.target.className.indexOf('Slider-Up') > -1){
+                _self.scrollUp(e);
+            }else if (e.target.className.indexOf('Slider-Down') > -1) {
+                _self.scrollDown(e);
+            }else if (e.target.className.indexOf('Slider-Track') > -1) {
+                _self.scrollTrack(e);
+            }else if (e.target.className.indexOf('Slider-Handle') > -1) {
+                _eventTarget = e.target; //存储目标事件
+                _targetClass = e.target.className; //存储目标Class
+                _eventTarget.className += ' ' + _self.sliderBarClick;
+
+                _self.scrollHandle(e);
+            }
+
+            //mousedown 防止内容被选中
+            document.onselectstart = function () {
+                return false;
+            };
+            //FF不支持，使用-moz-user-select:none;
+            _self.totalCont.style.MozUserSelect = 'none';
+
+            //mouseup 停止滑条滚动
+            MM.bind(document, "mouseup", _self.stopScroll);
+
+            return false;
+        };
+        //滑动器 .Slider-Up 执行
+        this.scrollUp = function () {
+            _self.startScroll(0, -_scrollSpeed);
+        };
+        //滑动器 .Slider-Down 执行
+        this.scrollDown = function () {
+            _self.startScroll(0, _scrollSpeed);
+        }
+        //滑动器 .Slider-Track 执行
+        this.scrollTrack = function (e) {
+            var cursorTop = e.clientY + (document.body.scrollTop || document.documentElement.scrollTop);
+            _self.scroll(0, cursorTop - _trackTop - (_handleHeight / 2));
+        };
+        //滑动器 .Slider-Handle 执行
+        this.scrollHandle = function (e) {
+            var cursorTop = e.clientY + (document.body.scrollTop || document.documentElement.scrollTop);
+            _getCursorTop = cursorTop - MM.getDocOffset(_sliderHandle).top;
+            MM.bind(document, "mousemove", _self.sliderBarDrag);
+        };
+        //滑动器开始滚动
+        this.startScroll = function (x, y) {
+            _barDistX = x;
+            _barDistY = y;
+            window.clearInterval(_scrollTimer);
+            _scrollTimer = window.setInterval(function () {
+                _self.scrollBy(_barDistX, _barDistY);
+            }, 40);
+        };
+        //滑动器停止滚动
+        this.stopScroll = function () {
+            MM.unbind(document, "mousemove", _self.sliderBarDrag);
+            MM.unbind(document, "mouseup", _self.stopScroll);
+            //滚动结束解除文本不可选
+            document.onselectstart = function () {
+                return true;
+            };
+            //FF不支持，使用-moz-user-select:moz-all;
+            _self.totalCont.style.MozUserSelect = 'auto';
+            //清除定时器
+            if (_scrollTimer){
+                window.clearInterval(_scrollTimer);
+            }
+            //移除SliderBarClick的class
+            if (!_targetClass) {
+                return;
+            }
+            _eventTarget.className = _targetClass;
+        };
+        //拖动滑条
+        this.sliderBarDrag = function (e) {
+            e = e || window.event;
+            var cursorMoveTop = e.clientY + (document.body.scrollTop || document.documentElement.scrollTop) - _trackTop;
+            with (_sliderHandle.style) {
+                if (cursorMoveTop >= _trackHeight - _handleHeight + _getCursorTop){
+                    top = _trackHeight - _handleHeight + "px";
+                }else if (cursorMoveTop <= _getCursorTop){
+                    top = "0px";
+                }else{
+                    top = cursorMoveTop - _getCursorTop + "px";
+                }
+                _y = parseInt(top);
+            }
+            _self.moveContent();
+        };
+        //查询指定Class
+        this.findClass = function (ClassName, ParentElem) {
+            var child = ParentElem.childNodes;
+            for (var i = 0; i < child.length; i++) {
+                if (child[i].className && child[i].className == ClassName){
+                    return child[i];
+                }
+            }
+        };
+    }
+    //使用
+    var bar = new Slider();
+    bar.viewCont = 'viewCont';
+    bar.totalCont = 'totalCont';
+    bar.sliderVer = 'newsSliderVertical';
+    bar.sliderState = true;
+    bar.sliderBarClick = 'Slider-Handle-click';
+    bar.init();
+
+    var bar2 = new Slider();
+    bar2.viewCont = 'viewCont2';
+    bar2.totalCont = 'totalCont2';
+    bar2.sliderVer = 'newsSliderVertical2';
+    bar2.sliderState = true;
+    bar2.sliderBarClick = 'Slider-Handle-click';
+    bar2.init();
+</script>
+</body>
+</html>

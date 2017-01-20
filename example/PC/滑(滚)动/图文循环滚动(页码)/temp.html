@@ -1,0 +1,329 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="../../../lib/global.css" />
+    <script type="text/javascript" src="../../../lib/lazyQuery.js"></script>
+    <style type="text/css">
+        .scroll{width:620px;height:90px;margin:20px auto;overflow:hidden;padding:10px;border:1px solid #000;}
+        .scroll-left,
+        .scroll-right{width:25px;height:90px;line-height:90px;text-align:center;color:#fff;background:#2D61CC;float:left;cursor:pointer;}
+        .scroll-right{float:right;}
+        .pic{width:540px;height:90px;float:left;display:inline;margin:0 0 0 5px;overflow:hidden;}
+        .pic ul{display:block;}
+        .pic li{float:left;display:inline;width:140px;text-align:center;}
+        .pic li img{vertical-align:middle;}
+        #page{text-align:center;}
+        #page span{display:inline-block;width:10px;height:10px;border:1px solid #c00;margin:0 2px;}
+        #page .now{background:#c00;}
+    </style>
+</head>
+<body>
+
+<div class="scroll">
+    <div class="scroll-left" id="leftBtn">&lt;</div>
+    <div class="pic" id="scrollPic">
+        <ul>
+            <li><a href="javascript:void(0);"><img src="images/01.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/01.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/01.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/01.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/02.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/02.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/02.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/02.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/03.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/03.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/03.jpg" width="130" height="90" alt="" /></a></li>
+            <li><a href="javascript:void(0);"><img src="images/03.jpg" width="130" height="90" alt="" /></a></li>
+        </ul>
+    </div>
+    <div class="scroll-right" id="rightBtn">&gt;</div>
+</div>
+<div id="page"></div>
+<script type="text/javascript">
+    //滚动图片构造函数
+    function ScrollPic(scrollContId, arrLeftId, arrRightId, dotListId) {
+        this.scrollContId = scrollContId;
+        this.arrLeftId = arrLeftId;
+        this.arrRightId = arrRightId;
+        this.dotListId = dotListId;
+        this.dotClassName = "dotItem";
+        this.dotOnClassName = "dotItemOn";
+        this.dotObjArr = [];
+        this.pageWidth = 0;
+        this.frameWidth = 0;
+        this.speed = 10;
+        this.space = 10;
+        this.pageIndex = 0;
+        this.autoPlay = true;
+        this.autoPlayTime = 5;
+        var _autoTimeObj,
+            _scrollTimeObj,
+            _state = "ready";
+        this.stripDiv = document.createElement("DIV");
+        this.listDiv01 = document.createElement("DIV");
+        this.listDiv02 = document.createElement("DIV");
+        if (!ScrollPic.childs) {
+            ScrollPic.childs = [];
+        }
+        this.ID = ScrollPic.childs.length;
+        ScrollPic.childs.push(this);//将ScrollPic填进ScrollPic.childs数组，便于调用ScrollPic的方法
+        //初始化
+        this.initialize = function () {
+            var _self = this;
+            //未设置scrollContId,将会报错
+            if (!this.scrollContId) {
+                throw new Error("必须指定scrollContId.");
+                return;
+            }
+            this.scrollContDiv = MM.$(this.scrollContId);
+            //未查询到ID名称,将会报错
+            if (!this.scrollContDiv) {
+                throw new Error("scrollContId不是正确的对象.(scrollContId = \"" + this.scrollContId + "\")");
+                return;
+            }
+            //设定初始样式
+            this.scrollContDiv.style.width = this.frameWidth + "px";
+            this.scrollContDiv.style.overflow = "hidden";
+            this.listDiv01.innerHTML = this.listDiv02.innerHTML = this.scrollContDiv.innerHTML;
+            this.scrollContDiv.innerHTML = "";
+            this.scrollContDiv.appendChild(this.stripDiv);
+            this.stripDiv.appendChild(this.listDiv01);
+            this.stripDiv.appendChild(this.listDiv02);
+            this.stripDiv.style.overflow = "hidden";
+            this.stripDiv.style.zoom = "1";
+            this.stripDiv.style.width = "32766px"; //1000%
+            if (-[1, ]) {
+                this.listDiv01.style.cssFloat = "left";
+                this.listDiv02.style.cssFloat = "left";
+            } else {
+                this.listDiv01.style.styleFloat = "left";
+                this.listDiv02.style.styleFloat = "left";
+            }
+            MM.bind(this.scrollContDiv, "mouseover", function(){
+                ScrollPic.childs[_self.ID].stop();
+            });
+            MM.bind(this.scrollContDiv, "mouseout", function(){
+                ScrollPic.childs[_self.ID].play();
+            });
+            //左按钮事件
+            if (this.arrLeftId) {
+                this.arrLeftObj = MM.$(this.arrLeftId);
+                if (this.arrLeftObj) {
+                    MM.bind(this.arrLeftObj, "mousedown", function(){
+                        ScrollPic.childs[_self.ID].rightMouseDown();
+                    });
+                    MM.bind(this.arrLeftObj, "mouseup", function(){
+                        ScrollPic.childs[_self.ID].rightEnd();
+                    });
+                    MM.bind(this.arrLeftObj, "mouseout", function(){
+                        ScrollPic.childs[_self.ID].rightEnd();
+                    });
+                }
+            }
+            //右按钮事件
+            if (this.arrRightId) {
+                this.arrRightObj = MM.$(this.arrRightId);
+                if (this.arrRightObj) {
+                    MM.bind(this.arrRightObj, "mousedown", function(){
+                        ScrollPic.childs[_self.ID].leftMouseDown();
+                    });
+                    MM.bind(this.arrRightObj, "mouseup", function(){
+                        ScrollPic.childs[_self.ID].leftEnd();
+                    });
+                    MM.bind(this.arrRightObj, "mouseout", function(){
+                        ScrollPic.childs[_self.ID].leftEnd();
+                    });
+                }
+            }
+            //页码
+            if (this.dotListId) {
+                this.dotListObj = MM.$(this.dotListId);
+                if (this.dotListObj) {
+                    var pages = Math.round(this.listDiv01.offsetWidth / this.frameWidth + 0.4),
+                        i,
+                        tempObj;
+                    for (i = 0; i < pages; i++) {
+                        tempObj = document.createElement("span");
+                        this.dotListObj.appendChild(tempObj);
+                        this.dotObjArr.push(tempObj);
+                        if (i == this.pageIndex) {
+                            tempObj.className = this.dotClassName;
+                        } else {
+                            tempObj.className = this.dotOnClassName;
+                        }
+                        tempObj.title = "第" + (i + 1) + "页";
+                        MM.bind(tempObj, "click", function(){
+                            ScrollPic.childs[_self.ID].pageTo(i);
+                        });
+                    }
+                }
+            }
+            if (this.autoPlay) {
+                this.play();
+            }
+        };
+
+        this.leftMouseDown = function () {
+            var _self = this;
+            if (_state != "ready") {
+                return;
+            }
+            _state = "floating";
+            _scrollTimeObj = setInterval(function(){
+                ScrollPic.childs[_self.ID].moveLeft();
+            }, this.speed);
+        };
+        this.rightMouseDown = function () {
+            var _self = this;
+            if (_state != "ready") {
+                return;
+            }
+            _state = "floating";
+            _scrollTimeObj = setInterval(function(){
+                ScrollPic.childs[_self.ID].moveRight();
+            }, this.speed);
+        };
+        this.moveLeft = function () {
+            //当向左滚动值大于(listDiv01)宽度值时
+            if (this.scrollContDiv.scrollLeft + this.space >= this.listDiv01.scrollWidth) {
+                this.scrollContDiv.scrollLeft = this.scrollContDiv.scrollLeft + this.space - this.listDiv01.scrollWidth;
+            } else {
+                this.scrollContDiv.scrollLeft += this.space;
+            }
+            this.accountPageIndex();
+        };
+        this.moveRight = function () {
+            if (this.scrollContDiv.scrollLeft - this.space <= 0) {
+                this.scrollContDiv.scrollLeft = this.listDiv01.scrollWidth + this.scrollContDiv.scrollLeft - this.space;
+            } else {
+                this.scrollContDiv.scrollLeft -= this.space;
+            }
+            this.accountPageIndex();
+        };
+        this.leftEnd = function () {
+            if (_state != "floating") {
+                return;
+            }
+            _state = "stoping";
+            clearInterval(_scrollTimeObj);
+            var fill = this.pageWidth - this.scrollContDiv.scrollLeft % this.pageWidth;
+            this.move(fill)
+        };
+        this.rightEnd = function () {
+            if (_state != "floating") {
+                return;
+            }
+            _state = "stoping";
+            clearInterval(_scrollTimeObj);
+            var fill = -this.scrollContDiv.scrollLeft % this.pageWidth;
+            this.move(fill);
+        };
+        this.move = function (num, quick) {
+            var _self = this;
+            var thisMove = num / 5;
+            if (!quick) {
+                if (thisMove > this.space) {
+                    thisMove = this.space;
+                }
+                if (thisMove < -this.space) {
+                    thisMove = -this.space;
+                }
+            }
+            if (Math.abs(thisMove) < 1 && thisMove != 0) {
+                thisMove = thisMove >= 0 ? 1 : -1;
+            } else {
+                thisMove = Math.round(thisMove);
+            }
+            var temp = this.scrollContDiv.scrollLeft + thisMove;
+            if (thisMove > 0) {
+                if (this.scrollContDiv.scrollLeft + thisMove >= this.listDiv01.scrollWidth) {
+                    this.scrollContDiv.scrollLeft = this.scrollContDiv.scrollLeft + thisMove - this.listDiv01.scrollWidth;
+                } else {
+                    this.scrollContDiv.scrollLeft += thisMove;
+                }
+            } else {
+                if (this.scrollContDiv.scrollLeft - thisMove <= 0) {
+                    this.scrollContDiv.scrollLeft = this.listDiv01.scrollWidth + this.scrollContDiv.scrollLeft - thisMove;
+                } else {
+                    this.scrollContDiv.scrollLeft += thisMove;
+                }
+            }
+            num -= thisMove;
+            if (Math.abs(num) == 0) {
+                _state = "ready";
+                if (this.autoPlay) {
+                    this.play();
+                }
+                this.accountPageIndex();
+                return;
+            } else {
+                this.accountPageIndex();
+                setTimeout(function(){
+                    ScrollPic.childs[_self.ID].move(num, quick);
+                }, this.speed);
+            }
+        };
+        this.next = function () {
+            if (_state != "ready") {
+                return;
+            }
+            _state = "stoping";
+            this.move(this.pageWidth, true)
+        };
+        this.play = function () {
+            var _self = this;
+            if (!this.autoPlay) {
+                return;
+            }
+            clearInterval(_autoTimeObj);
+            _autoTimeObj = setInterval(function(){
+                ScrollPic.childs[_self.ID].next();
+            }, this.autoPlayTime * 1000);
+        };
+        this.stop = function () {
+            clearInterval(_autoTimeObj);
+        };
+        this.pageTo = function (num) {
+            if (_state != "ready") {
+                return;
+            }
+            _state = "stoping";
+            var fill = num * this.frameWidth - this.scrollContDiv.scrollLeft;
+            this.move(fill, true);
+        };
+        this.accountPageIndex = function () {
+            this.pageIndex = Math.round(this.scrollContDiv.scrollLeft / this.frameWidth);
+            if (this.pageIndex > Math.round(this.listDiv01.offsetWidth / this.frameWidth + 0.4) - 1) {
+                this.pageIndex = 0;
+            }
+            var i;
+            for (i = 0; i < this.dotObjArr.length; i++) {
+                if (i == this.pageIndex) {
+                    this.dotObjArr[i].className = this.dotClassName;
+                } else {
+                    this.dotObjArr[i].className = this.dotOnClassName;
+                }
+            }
+        }
+    };
+    //使用
+    var scrollPic = new ScrollPic();        //定义变量，并初始化方法
+    scrollPic.scrollContId   = "scrollPic"; //内容容器ID
+    scrollPic.arrLeftId      = "leftBtn";   //左箭头ID
+    scrollPic.arrRightId     = "rightBtn";  //右箭头ID
+    scrollPic.frameWidth     = 560; //展示数量 -》 展示宽度/单个宽度=数量
+    scrollPic.pageWidth      = 560; //翻页宽度
+    scrollPic.speed          = 10;   //移动速度(单位毫秒，越小越快)
+    scrollPic.space          = 10;   //每次移动像素(单位px，越大越快)
+    scrollPic.autoPlay       = false; //自动播放
+    scrollPic.autoPlayTime   = 3;    //自动播放间隔时间(秒)
+    scrollPic.dotListId = 'page';      //页码父级标签
+    scrollPic.dotClassName = "now";    //当前页码标签
+    scrollPic.dotOnClassName = "dot";  //其他页码标签
+    scrollPic.initialize();  //初始化
+</script>
+</body>
+</html>
